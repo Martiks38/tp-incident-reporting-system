@@ -21,7 +21,7 @@ public class Specialty {
   @Id
   @Getter
   @Column(name = "id", nullable = false)
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long specialty_id;
 
   @Getter

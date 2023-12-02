@@ -19,13 +19,10 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "client", schema = "client")
 @Entity
@@ -33,8 +30,17 @@ public class Client {
   @Id
   @Getter
   @Column(name = "id", nullable = false)
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long client_id;
+
+  public Client(String cuit, String business_name, String mail, boolean state, List<Incident> incidents, List<Service> client_services){
+    this.cuit = cuit;
+    this.business_name = business_name;
+    this.mail = mail;
+    this.state = state;
+    this.incidents = incidents;
+    this.client_services = client_services;
+  }
 
   @Getter
   @Setter
@@ -61,9 +67,9 @@ public class Client {
   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
   private List<Incident> incidents;
   
-  // @Getter
-  // @Setter
-  // @ManyToMany(cascade = CascadeType.ALL)
-  // @JoinTable(name = "client__service", joinColumns = @JoinColumn(name = "fk_cs_service", nullable = false), inverseJoinColumns = @JoinColumn(name = "fk_cs_client", nullable = false))
-  // private List<Service> client_services;
+  @Getter
+  @Setter
+  @ManyToMany(cascade = CascadeType.ALL)
+  @JoinTable(name = "client__service", joinColumns = @JoinColumn(name = "fk_cs_client", nullable = false), inverseJoinColumns = @JoinColumn(name = "fk_cs_service", nullable = false))
+  private List<Service> client_services;
 }

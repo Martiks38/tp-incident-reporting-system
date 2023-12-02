@@ -3,6 +3,7 @@ package com.tp.domain.technical;
 import java.util.List;
 
 import com.tp.domain.specialty.Specialty;
+import com.tp.utils.CheckFormatEmail;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -21,9 +22,8 @@ public class TechnicalRepository implements TechnicalDAO{
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public List<Technical> findAll() {
-    return (List<Technical>) manager.createQuery("FROM Technical").getResultList();
+    return  manager.createQuery("FROM Technical", Technical.class).getResultList();
   }
 
   @Override
@@ -82,7 +82,7 @@ public class TechnicalRepository implements TechnicalDAO{
         technical.setIncident_resolution_speed(t_incident_resolution_speed);
       }
 
-      if(t_mail != null && TechnicalCheckData.isValidEmail(t_mail)){
+      if(t_mail != null && CheckFormatEmail.isValidEmail(t_mail)){
         technical.setMail(t_mail);
       }
 

@@ -28,18 +28,24 @@ public class Service {
   @Id
   @Getter
   @Column(name = "id", nullable = false)
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long service_id;
+
+  public Service(String service_name, List<Client> clients, List<TypeProblem> typesProblem) {
+    this.service_name = service_name;
+    this.clients = clients;
+    this.typesProblem = typesProblem;
+  }
 
   @Getter
   @Setter
   @Column(nullable = false, unique = true, length = 45)
   private String service_name;
 
-  // @Getter
-  // @Setter
-  // @ManyToMany(mappedBy = "client_services", cascade = CascadeType.ALL)
-  // private List<Client> clients;
+  @Getter
+  @Setter
+  @ManyToMany(mappedBy = "client_services", cascade = CascadeType.ALL)
+  private List<Client> clients;
 
   @Getter
   @Setter

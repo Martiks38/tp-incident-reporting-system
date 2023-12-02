@@ -29,7 +29,7 @@ public class TypeProblem {
   @Id
   @Getter
   @Column(nullable = false, name = "id")
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long type_problem_id;
 
   @Getter
