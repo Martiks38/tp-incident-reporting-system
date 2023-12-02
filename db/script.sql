@@ -35,20 +35,21 @@
   DROP TABLE IF EXISTS `incident-reporting-system`.`technical` ;
 
   CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`technical` (
-    `id` CHAR(36) NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `technical_name` VARCHAR(60) NOT NULL,
     `number_incidents_resolved` INT NOT NULL DEFAULT 0,
     `incident_resolution_speed` BIGINT NULL DEFAULT NULL,
     `mail` VARCHAR(45) NOT NULL,
     `phone_number` VARCHAR(45) NOT NULL,
-    `fk_notification_medium` BIGINT NOT NULL,
+    `fk_notification_medium` BIGINT,
+	  state TINYINT NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `fk_notification_medium_id` (`fk_notification_medium` ASC) VISIBLE,
     CONSTRAINT `fk_notification_medium_id`
       FOREIGN KEY (`fk_notification_medium`)
       REFERENCES `incident-reporting-system`.`notification_medium` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE);
+      ON DELETE SET NULL
+      ON UPDATE SET NULL);
 
 
   -- -----------------------------------------------------
@@ -68,20 +69,20 @@
   DROP TABLE IF EXISTS `incident-reporting-system`.`technical__specialty` ;
 
   CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`technical__specialty` (
-    `fk_ts_technical` CHAR(36) NOT NULL,
-    `fk_ts_specialty` BIGINT NOT NULL,
+    `fk_ts_technical` BIGINT,
+    `fk_ts_specialty` BIGINT,
     INDEX `fk_ts_technical` (`fk_ts_technical` ASC) VISIBLE,
     INDEX `fk_ts_specialty` (`fk_ts_specialty` ASC) VISIBLE,
     CONSTRAINT `fk_ts_technical`
       FOREIGN KEY (`fk_ts_technical`)
       REFERENCES `incident-reporting-system`.`technical` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE,
+      ON DELETE SET NULL
+      ON UPDATE SET NULL,
     CONSTRAINT `fk_ts_specialty`
       FOREIGN KEY (`fk_ts_specialty`)
       REFERENCES `incident-reporting-system`.`specialty` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE);
+      ON DELETE SET NULL
+      ON UPDATE SET NULL);
 
 
   -- -----------------------------------------------------
@@ -101,10 +102,11 @@
   DROP TABLE IF EXISTS `incident-reporting-system`.`client` ;
 
   CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`client` (
-    `id` CHAR(36) NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `cuit` VARCHAR(11) NOT NULL,
     `business_name` VARCHAR(80) NOT NULL,
     `mail` VARCHAR(45) NOT NULL,
+	  state TINYINT NOT NULL,
     PRIMARY KEY (`id`));
 
 
@@ -127,20 +129,20 @@
   DROP TABLE IF EXISTS `incident-reporting-system`.`type_problem__specialty` ;
 
   CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`type_problem__specialty` (
-    `fk_tps_type_problem` BIGINT NOT NULL,
-    `fk_tps_specialty` BIGINT NOT NULL,
+    `fk_tps_type_problem` BIGINT,
+    `fk_tps_specialty` BIGINT,
     INDEX `fk_tps_type_problem` (`fk_tps_type_problem` ASC) VISIBLE,
     INDEX `fk_tps_specialty` (`fk_tps_specialty` ASC) VISIBLE,
     CONSTRAINT `fk_tps_type_problem`
       FOREIGN KEY (`fk_tps_type_problem`)
       REFERENCES `incident-reporting-system`.`type_problem` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE,
+      ON DELETE SET NULL
+      ON UPDATE SET NULL,
     CONSTRAINT `fk_tps_specialty`
       FOREIGN KEY (`fk_tps_specialty`)
       REFERENCES `incident-reporting-system`.`specialty` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE);
+      ON DELETE SET NULL
+      ON UPDATE SET NULL);
 
 
   -- -----------------------------------------------------
@@ -149,27 +151,28 @@
   DROP TABLE IF EXISTS `incident-reporting-system`.`incident` ;
 
   CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`incident` (
-    `id` CHAR(36) NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `description` VARCHAR(255) NOT NULL,
     `considerations` VARCHAR(255) NOT NULL,
-    `fk_technical_id` CHAR(36) NOT NULL,
-    `fk_client_id` CHAR(36) NOT NULL,
+    `fk_technical_id` BIGINT,
+    `fk_client_id` BIGINT,
     `resolved` TINYINT NOT NULL,
     `create_time` TIMESTAMP NOT NULL,
     `time_is_up` TIMESTAMP NULL DEFAULT NULL,
+	state TINYINT NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `fk_client_id` (`fk_client_id` ASC) VISIBLE,
     INDEX `fk_technical_id` (`fk_technical_id` ASC) VISIBLE,
     CONSTRAINT `fk_client_id`
       FOREIGN KEY (`fk_client_id`)
       REFERENCES `incident-reporting-system`.`client` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE,
+      ON DELETE SET NULL
+      ON UPDATE SET NULL,
     CONSTRAINT `fk_technical_id`
       FOREIGN KEY (`fk_technical_id`)
       REFERENCES `incident-reporting-system`.`technical` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE);
+      ON DELETE SET NULL
+      ON UPDATE SET NULL);
 
 
   -- -----------------------------------------------------
@@ -178,20 +181,20 @@
   DROP TABLE IF EXISTS `incident-reporting-system`.`client__service` ;
 
   CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`client__service` (
-    `fk_cs_client` CHAR(36) NOT NULL,
-    `fk_cs_service` BIGINT NOT NULL,
+    `fk_cs_client` BIGINT,
+    `fk_cs_service` BIGINT,
     INDEX `fk_cs_client` (`fk_cs_client` ASC) VISIBLE,
     INDEX `fk_cs_service` (`fk_cs_service` ASC) VISIBLE,
     CONSTRAINT `fk_cs_client`
       FOREIGN KEY (`fk_cs_client`)
       REFERENCES `incident-reporting-system`.`client` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE,
+      ON DELETE SET NULL
+      ON UPDATE SET NULL,
     CONSTRAINT `fk_cs_service`
       FOREIGN KEY (`fk_cs_service`)
       REFERENCES `incident-reporting-system`.`service` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE);
+      ON DELETE SET NULL
+      ON UPDATE SET NULL);
 
 
   -- -----------------------------------------------------
@@ -200,20 +203,20 @@
   DROP TABLE IF EXISTS `incident-reporting-system`.`incident__type_problem` ;
 
   CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`incident__type_problem` (
-    `fk_ip_incident` CHAR(36) NOT NULL,
-    `fk_ip_type_problem` BIGINT NOT NULL,
+    `fk_ip_incident` BIGINT,
+    `fk_ip_type_problem` BIGINT,
     INDEX `fk_ip_incident` (`fk_ip_incident` ASC) VISIBLE,
     INDEX `fk_ip_type_problem` (`fk_ip_type_problem` ASC) VISIBLE,
     CONSTRAINT `fk_ip_incident`
       FOREIGN KEY (`fk_ip_incident`)
       REFERENCES `incident-reporting-system`.`incident` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE,
+      ON DELETE SET NULL
+      ON UPDATE SET NULL,
     CONSTRAINT `fk_ip_type_problem`
       FOREIGN KEY (`fk_ip_type_problem`)
       REFERENCES `incident-reporting-system`.`type_problem` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE);
+      ON DELETE SET NULL
+      ON UPDATE SET NULL);
 
 
   -- -----------------------------------------------------
@@ -222,20 +225,20 @@
   DROP TABLE IF EXISTS `incident-reporting-system`.`service__type_problem` ;
 
   CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`service__type_problem` (
-    `fk_stp_service` BIGINT NOT NULL,
-    `fk_stp_type_problem` BIGINT NOT NULL,
+    `fk_stp_service` BIGINT,
+    `fk_stp_type_problem` BIGINT,
     INDEX `fk_stp_service` (`fk_stp_service` ASC) VISIBLE,
     INDEX `fk_stp_type_problem` (`fk_stp_type_problem` ASC) VISIBLE,
     CONSTRAINT `fk_stp_service`
       FOREIGN KEY (`fk_stp_service`)
       REFERENCES `incident-reporting-system`.`service` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE,
+      ON DELETE SET NULL
+      ON UPDATE SET NULL,
     CONSTRAINT `fk_stp_type_problem`
       FOREIGN KEY (`fk_stp_type_problem`)
       REFERENCES `incident-reporting-system`.`type_problem` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE);
+      ON DELETE SET NULL
+      ON UPDATE SET NULL);
 
 
   SET SQL_MODE=@OLD_SQL_MODE;
@@ -253,10 +256,10 @@
 
   INSERT INTO `incident-reporting-system`.technical
   VALUES
-      ("f6e57f24-6f9e-4ac5-bb5d-6eb76d048812", "Maider Gomez", 2, 14400043, "maidergomez@gmail.com", "3476123456", 1),
-      ("20184a2c-35bf-427e-aa18-92c4e2a42a07", "Gheorghe Galindo", 5, 32400000, "gheorghe.galindo@hotmail.com", "3411234567", 2),
-      ("a459b81d-e9f5-41e2-884f-b50e10038a29", "Cesareo Gutierrez", 1, 14400981, "cesareo@gutierrez.com", "1112345678", 1),
-      ("66d3085f-411c-45f3-9fff-54ea835adb56", "Alejandra Puerta", 0, null, "alejandra_puerta@outlook.com", "3421234567", 2);
+      (1, "Maider Gomez", 2, 14400043, "maidergomez@gmail.com", "3476123456", 1, 1),
+      (2, "Gheorghe Galindo", 5, 32400000, "gheorghe.galindo@hotmail.com", "3411234567", 2, 1),
+      (3, "Cesareo Gutierrez", 1, 14400981, "cesareo@gutierrez.com", "1112345678", 1, 1),
+      (4, "Alejandra Puerta", 0, null, "alejandra_puerta@outlook.com", "3421234567", 2, 1);
 
   INSERT INTO `incident-reporting-system`.specialty
     VALUES
@@ -270,14 +273,14 @@
 
   INSERT INTO `incident-reporting-system`.technical__specialty
     VALUES
-      ("f6e57f24-6f9e-4ac5-bb5d-6eb76d048812", 1),
-      ("f6e57f24-6f9e-4ac5-bb5d-6eb76d048812", 2),
-      ("f6e57f24-6f9e-4ac5-bb5d-6eb76d048812", 3),
-      ("20184a2c-35bf-427e-aa18-92c4e2a42a07", 1),
-      ("20184a2c-35bf-427e-aa18-92c4e2a42a07", 2),
-      ("a459b81d-e9f5-41e2-884f-b50e10038a29", 3),
-      ("66d3085f-411c-45f3-9fff-54ea835adb56", 4),
-      ("66d3085f-411c-45f3-9fff-54ea835adb56", 5);
+      (1, 1),
+      (1, 2),
+      (1, 3),
+      (2, 1),
+      (2, 2),
+      (3, 3),
+      (4, 4),
+      (4, 5);
 
   INSERT INTO `incident-reporting-system`.`service`
     VALUES
@@ -289,9 +292,9 @@
       
   INSERT INTO `incident-reporting-system`.`client`
     VALUES
-      ('ee9d15b8-c736-42be-901a-13093494d2fe', '34447117969', 'TecnoDynamics Solutions', "contact@technoDynamics.com"),
-      ('f292f337-9a75-4d7e-a4a1-33d888765141', '27729800193', 'Global InnovateTech Services', "contact@innovateTech.com"),
-      ('71a3a083-afa5-4b87-86a5-535f627818af', '30956149653', 'Quantum Nexus Enterprises', "contact@quantumNexus.com");
+      (1, '34447117969', 'TecnoDynamics Solutions', "contact@technoDynamics.com", 1),
+      (2, '27729800193', 'Global InnovateTech Services', "contact@innovateTech.com", 1),
+      (3, '30956149653', 'Quantum Nexus Enterprises', "contact@quantumNexus.com", 1);
 
   INSERT INTO `incident-reporting-system`.type_problem
     VALUES
@@ -336,12 +339,12 @@
       
   INSERT INTO `incident-reporting-system`.incident
     VALUES
-      ('5138aede-a64c-471b-a6e2-8ac344fb2cd2', 'Los usuarios experimentan problemas intermitentes de conexión a la red, lo que resulta en la imposibilidad de acceder a servicios en línea o compartir archivos de manera efectiva.', 'Problemas intermitentes de conexión afectan la accesibilidad a servicios en línea y la eficacia en la compartición de archivos. Se requiere diagnóstico exhaustivo, considerando enrutador, posibles interferencias y configuraciones de firewall.', "f6e57f24-6f9e-4ac5-bb5d-6eb76d048812", 'ee9d15b8-c736-42be-901a-13093494d2fe', 0, '2023-11-24 16:13:34', null),
-      ('ea1ebab9-55e3-4b68-a0fa-396f64150fb9', 'Se ha detectado un intento de acceso no autorizado a sistemas críticos de la empresa, lo que representa una amenaza potencial para la integridad y la confidencialidad de los datos.', 'Reporte de usuarios con errores al acceder a la base de datos, impactando aplicaciones dependientes. Se requiere revisión y corrección de consultas, asegurando la integridad de datos y optimizando el rendimiento.', '66d3085f-411c-45f3-9fff-54ea835adb56', '71a3a083-afa5-4b87-86a5-535f627818af', 0, '2023-11-18 20:13:34', null),
-      ('e6327f74-af7d-453f-9d0a-4edcebc9faca', 'Los usuarios informan errores al intentar acceder o manipular datos en la base de datos, lo que afecta la funcionalidad de las aplicaciones que dependen de la información almacenada.', 'Usuarios reportan errores en acceso y manipulación de datos en la base, afectando aplicaciones dependientes. Se necesita revisar y corregir consultas para garantizar la integridad y optimizar el rendimiento.', '66d3085f-411c-45f3-9fff-54ea835adb56', 'f292f337-9a75-4d7e-a4a1-33d888765141', 0, '2023-11-20 01:13:34', null);
+      (1, 'Los usuarios experimentan problemas intermitentes de conexión a la red, lo que resulta en la imposibilidad de acceder a servicios en línea o compartir archivos de manera efectiva.', 'Problemas intermitentes de conexión afectan la accesibilidad a servicios en línea y la eficacia en la compartición de archivos. Se requiere diagnóstico exhaustivo, considerando enrutador, posibles interferencias y configuraciones de firewall.', 1, 1, 0, '2023-11-24 16:13:34', null, 1),
+      (2, 'Se ha detectado un intento de acceso no autorizado a sistemas críticos de la empresa, lo que representa una amenaza potencial para la integridad y la confidencialidad de los datos.', 'Reporte de usuarios con errores al acceder a la base de datos, impactando aplicaciones dependientes. Se requiere revisión y corrección de consultas, asegurando la integridad de datos y optimizando el rendimiento.', 4, 3, 0, '2023-11-18 20:13:34', null, 1),
+      (3, 'Los usuarios informan errores al intentar acceder o manipular datos en la base de datos, lo que afecta la funcionalidad de las aplicaciones que dependen de la información almacenada.', 'Usuarios reportan errores en acceso y manipulación de datos en la base, afectando aplicaciones dependientes. Se necesita revisar y corregir consultas para garantizar la integridad y optimizar el rendimiento.', 4, 2, 0, '2023-11-20 01:13:34', null, 1);
 
   INSERT INTO `incident-reporting-system`.client__service
     VALUES
-      ('ee9d15b8-c736-42be-901a-13093494d2fe', 2),
-      ('f292f337-9a75-4d7e-a4a1-33d888765141', 5),
-      ('71a3a083-afa5-4b87-86a5-535f627818af', 3);
+      (1, 2),
+      (2, 5),
+      (3, 3);
