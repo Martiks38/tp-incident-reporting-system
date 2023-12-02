@@ -7,11 +7,16 @@
 
     <persistence-unit name="test-bd" transaction-type="RESOURCE_LOCAL">
 
-        <class>com.tp.infrastructure.domain.Author</class>
-        <class>com.tp.infrastructure.domain.Book</class>
+        <class>com.tp.domain.client.Client</class>
+        <class>com.tp.domain.incident.Incident</class>
+        <class>com.tp.domain.notificationMedium.NotificationMedium</class>
+        <class>com.tp.domain.service.Service</class>
+        <class>com.tp.domain.specialty.Specialty</class>
+        <class>com.tp.domain.technical.Technical</class>
+        <class>com.tp.domain.type_problem.TypeProblem</class>
 
         <properties>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/library" />
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/incident-reporting-system" />
             <property name="jakarta.persistence.jdbc.user" value="root" />
             <property name="jakarta.persistence.jdbc.password" value="1234" />
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
