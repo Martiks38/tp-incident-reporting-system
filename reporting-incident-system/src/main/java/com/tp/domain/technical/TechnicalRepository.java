@@ -32,12 +32,13 @@ public class TechnicalRepository implements TechnicalDAO{
 
     try {
       transaction.begin();
-      
+
       TechnicalCheckData.check(data);
 
       manager.persist(data);
 
       transaction.commit();
+
     } catch (Exception e) {
       if(transaction != null && transaction.isActive()){
         transaction.rollback();
@@ -67,7 +68,6 @@ public class TechnicalRepository implements TechnicalDAO{
       Long t_incident_resolution_speed = data.getIncident_resolution_speed();
       String t_mail = data.getMail();
       String t_phone_number = data.getPhone_number();
-      // Long t_fk_notification_medium = data.getFk_notification_medium();
       List<Specialty> t_specialties = data.getSpecialties();
 
       if(t_name != null){

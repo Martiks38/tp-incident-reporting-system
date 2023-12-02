@@ -2,6 +2,7 @@ package com.tp.domain.technical;
 
 import java.util.List;
 
+import com.tp.domain.notificationMedium.NotificationMedium;
 import com.tp.domain.specialty.Specialty;
 import com.tp.utils.CheckFormatEmail;
 import com.tp.utils.CheckFormatName;
@@ -17,6 +18,7 @@ public class TechnicalCheckData {
     String mail = t.getMail();
     String phone_number = t.getPhone_number();
     List<Specialty> specialties = t.getSpecialties();
+    NotificationMedium medium = t.getMedium();
 
     if(!CheckFormatName.isValidName(name)){
       message += "El nombre del técnico no puede estar vacío.\n";
@@ -36,6 +38,10 @@ public class TechnicalCheckData {
 
     if(phone_number == null || phone_number.length() > 15){
       message += "El número de teléfono no es válido y puede tener un máximo de 15 dígitos.\n";
+    }
+
+    if(medium == null){
+      message += "El técnico debe tener asignado un medio de comunicación.\n";
     }
 
     if(specialties.size() == 0){

@@ -20,34 +20,34 @@ public class Main {
         EntityManager manager = factory.createEntityManager();
 
         EntityTransaction tx = manager.getTransaction();
-        
+
         try {
-            tx.begin();
-    
-            Service s = manager.createQuery("FROM Service", Service.class).getResultList().get(1);
+            // tx.begin();
+
+            Service s = manager.createQuery("FROM Service", Service.class).getResultList().get(0);
             List<Service> services = new ArrayList<Service>();
 
             services.add(s);
 
-            Client c = new Client("23142356312", "Maraviglioso Games S.A.", "contact@gmailmaravigliosogames.com", true, new ArrayList<>(), services);
+            // Client c = new Client("23142356312", "Maraviglioso Games S.A.", "contact@gmailmaravigliosogames.com", true, new ArrayList<>(), services);
     
-            manager.persist(c);
-            tx.commit();
-    
-    
-            // List<Client> clients = (List<Client>) manager.createQuery("FROM Client", Client.class).getResultList();
-            
-            // clients.stream().forEach(client -> System.out.println(client.getBusiness_name()));
-            
-            // Client cliente = manager.find(Client.class, 1);
-
-            // tx.begin();
-
-            // cliente
-
-            // manager.merge(cliente);
-
+            // manager.persist(c);
             // tx.commit();
+    
+    
+            List<Client> clients = (List<Client>) manager.createQuery("FROM Client", Client.class).getResultList();
+            
+            clients.stream().forEach(client -> System.out.println(client.getBusiness_name()));
+            
+            Client cliente = manager.find(Client.class, 4);
+
+            tx.begin();
+
+            cliente.setClient_services(services);
+
+            manager.merge(cliente);
+
+            tx.commit();
             
         } catch (Exception e) {
             if(tx != null && tx.isActive()){

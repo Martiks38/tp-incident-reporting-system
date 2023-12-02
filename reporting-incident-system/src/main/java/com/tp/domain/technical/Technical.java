@@ -22,12 +22,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "technical", schema = "technical")
 @Entity
@@ -38,6 +36,20 @@ public class Technical {
   @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long technical_id;
+
+  public Technical(String technical_name, int number_incidents_resolved, Long incident_resolution_speed, String mail,
+      String phone_number, boolean state, List<Incident> incidents, NotificationMedium medium,
+      List<Specialty> specialties) {
+    this.technical_name = technical_name;
+    this.number_incidents_resolved = number_incidents_resolved;
+    this.incident_resolution_speed = incident_resolution_speed;
+    this.mail = mail;
+    this.phone_number = phone_number;
+    this.state = state;
+    this.incidents = incidents;
+    this.medium = medium;
+    this.specialties = specialties;
+  }
 
   @Getter
   @Setter
