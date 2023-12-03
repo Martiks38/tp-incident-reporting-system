@@ -15,18 +15,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Getter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "service", schema = "service")
 @Entity
 public class Service {
   @Id
-  @Getter
   @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long service_id;
@@ -37,17 +35,14 @@ public class Service {
     this.typesProblem = typesProblem;
   }
 
-  @Getter
   @Setter
   @Column(nullable = false, unique = true, length = 45)
   private String service_name;
 
-  @Getter
   @Setter
   @ManyToMany(mappedBy = "client_services", cascade = CascadeType.ALL)
   private List<Client> clients;
 
-  @Getter
   @Setter
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "service__type_problem", joinColumns = @JoinColumn(name = "fk_stp_service", nullable = false), inverseJoinColumns = @JoinColumn(name = "fk_stp_type_problem", nullable = false))

@@ -56,7 +56,7 @@ public class ClientRepository implements ClientDAO {
         throw new Exception("Ya existe el cliente:" + data);
       }
     }catch (Exception e){
-      System.err.println("Error metodo ClienteRepository.update: "+ e);
+      System.err.println("Error metodo ClienteRepository.save: "+ e);
     }
   }
 

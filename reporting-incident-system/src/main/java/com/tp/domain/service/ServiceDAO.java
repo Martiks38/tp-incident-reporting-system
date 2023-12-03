@@ -7,7 +7,7 @@ public interface ServiceDAO {
 
   List<Service> findAll();
 
-  void save(Long id, Service data);
+  void save(Service data);
 
   void update(Long id, Service data);
 
