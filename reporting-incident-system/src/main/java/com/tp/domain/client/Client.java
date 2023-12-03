@@ -36,6 +36,10 @@ public class Client {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long client_id;
 
+  public Client(Long id){
+    client_id = id;
+  }
+
   public Client(String cuit, String business_name, String mail, boolean state, List<Incident> incidents, List<Service> client_services){
     this.cuit = cuit;
     this.business_name = business_name;
