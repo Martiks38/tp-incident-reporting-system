@@ -3,13 +3,9 @@ package com.tp.domain.notificationMedium;
 import java.util.List;
 
 public interface NotificationMediumDAO {
-  NotificationMedium find(int id);
+  NotificationMedium findById(Long id);
+
+  NotificationMedium findByName(String name);
 
   List<NotificationMedium> findAll();
-
-  void save(NotificationMedium data);
-
-  void update(int id, NotificationMedium data);
-
-  void delete(int id);
 }
