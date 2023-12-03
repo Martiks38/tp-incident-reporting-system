@@ -1,5 +1,6 @@
 package com.tp.infrastructure.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.tp.domain.service.Service;
@@ -17,17 +18,45 @@ public class PersistenceService implements ServiceDAO {
 
   @Override
   public Service findById(Long id) {
-    return manager.find(Service.class, id);
+    Service service = new Service();
+    
+    try {
+      service = manager.find(Service.class, id);
+    }catch (Exception e){
+      System.err.println(e.getMessage());
+    }
+   
+    return service;
   }
 
   @Override
   public Service findByName(String name) {
-    return manager.find(Service.class, name);
+    Service service = new Service();
+    
+    try {
+      service = manager.find(Service.class, name);
+    }catch (Exception e){
+      System.err.println(e.getMessage());
+    }
+   
+    return service;
   }
 
   @Override
   public List<Service> findAll() {
-    return manager.createQuery("FROM Service", Service.class).getResultList();
+    List<Service> result = new ArrayList<>();
+
+    try {
+      result = manager.createQuery("FROM Service", Service.class).getResultList();
+
+      if (result.isEmpty()){
+        throw new RuntimeException("No hay servicios");
+      }
+    }catch (Exception e){
+      System.err.println("Error metodo ServiceRepository.findAll" + e);
+    }
+    
+    return result;
   }
   
 }
