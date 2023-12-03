@@ -26,13 +26,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter
 @NoArgsConstructor
 @Table(name = "technical", schema = "technical")
 @Entity
 public class Technical {
 
   @Id
-  @Getter
   @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long technical_id;
@@ -55,49 +55,40 @@ public class Technical {
     this.specialties = specialties;
   }
 
-  @Getter
   @Setter
   @Column(nullable = false, length = 60)
   private String technical_name;
 
-  @Getter
   @Setter
   @Column(nullable = false)
   private int number_incidents_resolved;
 
-  @Getter
   @Setter
   @Column(nullable = true)
   private Long incident_resolution_speed;
 
-  @Getter
   @Setter
   @Column(nullable = false, length = 45)
   private String mail;
 
-  @Getter
   @Setter
   @Column(nullable = false, length = 45)
   private String phone_number;
 
-  @Getter
   @Setter
   @Convert(converter = NumericBooleanConverter.class)
   @Column(nullable = false)
   private boolean state;
 
-  @Getter
   @Setter
   @OneToMany(mappedBy = "technical")
   private List<Incident> incidents;
 
-  @Getter
   @Setter
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "fk_notification_medium", nullable = false)
   private NotificationMedium medium;
 
-  @Getter
   @Setter
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "technical__specialty", joinColumns = @JoinColumn(name = "fk_ts_technical"), inverseJoinColumns = @JoinColumn(name = "fk_ts_specialty"))

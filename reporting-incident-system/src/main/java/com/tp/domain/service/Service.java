@@ -19,7 +19,6 @@ import lombok.*;
 
 @Getter
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "service", schema = "service")
 @Entity
