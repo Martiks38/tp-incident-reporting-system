@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ClientRepository implements ClientDAO {
 
@@ -31,38 +32,29 @@ public class ClientRepository implements ClientDAO {
   @Override
   @SuppressWarnings("unchecked")
   public List<Client> findAll() {
-//    EntityTransaction tx = manager.getTransaction();
-//    tx.begin();
     List<Client> result = new ArrayList<>();
     try {
       result = manager.createQuery("FROM Client").getResultList();
       if (result.isEmpty()){
         throw new RuntimeException("No hay clientes");
-//      System.out.println("No hay clientes");
       }
     }catch (Exception e){
       System.err.println("Error metodo ClientRepository.findAll" + e);
     }
-
     return result;
-//    List<Client> clients = (List<Client>) manager.createQuery("FROM Client");
-//
   }
 
   @Override
   public void save(Client data) {
     List<Client> clientes = findAll();
     try {
-      for (Client cliente:clientes) {
-        if (!cliente.equals(data)){
-          manager.persist(data);
-        }else {
-          throw new Exception("Modifique los campos del cliente al actualizar");
-        }
+      if (!clientes.stream().anyMatch(client -> Objects.equals(client.getBusiness_name(), data.getBusiness_name()))
+        && !clientes.stream().anyMatch(client -> Objects.equals(client.getCuit(),data.getCuit()))
+      ){
+        manager.persist(data);
+      }else {
+        throw new Exception("Ya existe el cliente:" + data);
       }
-
-
-
     }catch (Exception e){
       System.err.println("Error metodo ClienteRepository.update: "+ e);
     }
