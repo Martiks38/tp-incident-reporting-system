@@ -1,14 +1,13 @@
 package com.tp.domain.client;
 
+import com.tp.domain.client.Client;
+import com.tp.domain.client.ClientDAO;
+import jakarta.persistence.EntityManager;
+
+import java.util.ArrayList;
 import java.util.List;
 
-// import com.tp.infrastructure.domain.service.Service;
-// import com.tp.infrastructure.domain.technical.Technical;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-
-public class ClientRepository implements ClientDAO{
+public class ClientRepository implements ClientDAO {
 
   static EntityManager manager;
 
@@ -17,8 +16,14 @@ public class ClientRepository implements ClientDAO{
   }
 
   @Override
-  public Client find(String id) {
-    Client client = manager.find(Client.class, id);
+  public Client find(Long id) {
+
+    Client client = new Client();
+    try {
+      client = manager.find(Client.class, id);
+    }catch (Exception e){
+      System.err.println("Error metodo ClientRepository.find");
+    }
 
     return client;
   }
@@ -26,86 +31,81 @@ public class ClientRepository implements ClientDAO{
   @Override
   @SuppressWarnings("unchecked")
   public List<Client> findAll() {
-    List<Client> clients = (List<Client>) manager.createQuery("FROM Client");
+//    EntityTransaction tx = manager.getTransaction();
+//    tx.begin();
+    List<Client> result = new ArrayList<>();
+    try {
+      result = manager.createQuery("FROM Client").getResultList();
+      if (result.isEmpty()){
+        throw new RuntimeException("No hay clientes");
+//      System.out.println("No hay clientes");
+      }
+    }catch (Exception e){
+      System.err.println("Error metodo ClientRepository.findAll" + e);
+    }
 
-    return clients;
+    return result;
+//    List<Client> clients = (List<Client>) manager.createQuery("FROM Client");
+//
   }
 
   @Override
   public void save(Client data) {
-    EntityTransaction transaction = manager.getTransaction();
-
+    List<Client> clientes = findAll();
     try {
-      transaction.begin();
-      
-      ClientCheckData.check(data);
-
-      manager.persist(data);
-
-      transaction.commit();
-    } catch (Exception e) {
-      if(transaction != null && transaction.isActive()){
-        transaction.rollback();
+      for (Client cliente:clientes) {
+        if (!cliente.equals(data)){
+          manager.persist(data);
+        }else {
+          throw new Exception("Modifique los campos del cliente al actualizar");
+        }
       }
 
-      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una base de datos que almacene los errores
-      e.printStackTrace();
-      System.err.println("Error en la transacción: " + e.getMessage());
+
+
+    }catch (Exception e){
+      System.err.println("Error metodo ClienteRepository.update: "+ e);
     }
   }
 
   @Override
-  public void update(String id, Client data) {
-    EntityTransaction transaction = manager.getTransaction();
-
+  public void update(Long id, Client data) {
+    Client client = manager.find(Client.class,id);
     try {
-      transaction.begin();
+      if (client != null){
+        if (!client.equals(data)){
+          client.setBusiness_name(data.getBusiness_name());
+          client.setMail(data.getMail());
+          client.setCuit(data.getCuit());
+          client.setClient_services(data.getClient_services());
+          manager.merge(client);
+        }else {
+          throw new Exception("Modifique los campos del cliente al actualizar");
+        }
 
-      Client client = this.find(id);
-
-      if(client == null){
-        throw new RuntimeException("No se ha el cliente solicitado.");
+      }else {
+        throw new Exception("El cliente que desea actualizar no existe");
       }
-
-      /**@TODO Terminar errores */
-      // String c_cuit = client.getCuit();
-      // String c_bussiness_name = client.getBusiness_name();
-      // Service c_service = client.getService();
-
-      // if(t_name != null){
-      //   technical.setTechnical_name(t_name);
-      // }
-
-      // if(t_media == null){
-      //   technical.setMeans_notification(t_media);
-      // }
-
-      // if(number_incidents_resolved < 0){
-      //   technical.setNumber_incidents_resolved(number_incidents_resolved);
-      // }
-
-      // if(incident_resolution_speed < 0){
-      //   technical.setIncident_resolution_speed(incident_resolution_speed);
-      // }
-
-      manager.persist(data);
-
-      transaction.commit();
-    } catch (Exception e) {
-      if(transaction != null && transaction.isActive()){
-        transaction.rollback();
-      }
-
-      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una base de datos que almacene los errores
-      e.printStackTrace();
-      System.err.println("Error en la transacción: " + e.getMessage());
+    }catch (Exception e){
+      System.err.println("Error metodo ClienteRepository.update: "+ e);
     }
   }
 
+
   @Override
-  public void delete(String id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'delete'");
+  public void delete(Long id) {
+
+    Client client = manager.find(Client.class,id);
+    try {
+      if (client != null){
+        client.setState(false);
+        manager.merge(client);
+      }else {
+        throw new Exception("El cliente que desea borrar no existe");
+      }
+    }catch (Exception e){
+      System.err.println("Error metodo ClienteRepository.delete "+ e);
+    }
   }
-  
+
 }
