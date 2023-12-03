@@ -37,6 +37,10 @@ public class Technical {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long technical_id;
 
+  public Technical(Long id){
+    this.technical_id = id;
+  }
+
   public Technical(String technical_name, int number_incidents_resolved, Long incident_resolution_speed, String mail,
       String phone_number, boolean state, List<Incident> incidents, NotificationMedium medium,
       List<Specialty> specialties) {

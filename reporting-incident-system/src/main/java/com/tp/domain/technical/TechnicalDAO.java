@@ -3,13 +3,15 @@ package com.tp.domain.technical;
 import java.util.List;
 
 public interface TechnicalDAO {
-  Technical find(String id);
+  Technical findById(Long id);
+  
+  Technical findByName(String name);
 
   List<Technical> findAll();
 
   void save(Technical data);
 
-  void update(String id, Technical data);
+  void update(Technical data);
 
-  void delete(String id);
+  void delete(Long id);
 }
