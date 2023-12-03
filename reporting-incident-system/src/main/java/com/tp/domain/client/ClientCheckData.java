@@ -1,5 +1,7 @@
 package com.tp.domain.client;
 
+import com.tp.utils.CheckFormatEmail;
+
 public class ClientCheckData {
 
   private static String message;
@@ -7,6 +9,7 @@ public class ClientCheckData {
   public static void check(Client c){
     String cuit = c.getCuit();
     String bussiness_name = c.getBusiness_name();
+    String mail = c.getMail();
 
     if(cuit == null || cuit.length() != 11){
       message += "El cuit debe tener 11 dígitos.\n";
@@ -14,6 +17,10 @@ public class ClientCheckData {
 
     if(bussiness_name == null || bussiness_name.length() == 0){
       message += "El nombre del negocio no puede estar vacío.\n";
+    }
+
+    if(!CheckFormatEmail.isValidEmail(mail)){
+      message += "El email ingresado no es válido.\n";
     }
 
     if(message != null){
