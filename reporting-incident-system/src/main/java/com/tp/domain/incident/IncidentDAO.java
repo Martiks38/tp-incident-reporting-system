@@ -1,16 +1,15 @@
 package com.tp.domain.incident;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface IncidentDAO {
-  Incident find(UUID id);
+  Incident findById(Long id);
 
   List<Incident> findAll();
 
-  void save(UUID id, Incident data);
+  void save(Long id, Incident data);
 
-  void update(UUID id, Incident data);
+  void update(Incident data);
 
-  void delete(UUID id);
+  void delete(Long id);
 }
