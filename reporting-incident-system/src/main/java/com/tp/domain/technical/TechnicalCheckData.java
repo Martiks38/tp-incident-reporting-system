@@ -11,7 +11,7 @@ public class TechnicalCheckData {
 
   private static String message;
 
-  public static void check(Technical t){
+  public static void check(Technical t) {
     String name = t.getTechnical_name();
     int number_incidents_resolved = t.getNumber_incidents_resolved();
     Long incident_resolution_speed = t.getIncident_resolution_speed();
@@ -20,35 +20,35 @@ public class TechnicalCheckData {
     List<Specialty> specialties = t.getSpecialties();
     NotificationMedium medium = t.getMedium();
 
-    if(!CheckFormatName.isValidName(name)){
+    if (!CheckFormatName.isValidName(name)) {
       message += "El nombre del técnico no puede estar vacío.\n";
     }
-    
-    if(number_incidents_resolved < 0){
+
+    if (number_incidents_resolved < 0) {
       message += "El número de incidentes resultos no puede ser menor a cero (0).\n";
     }
 
-    if(incident_resolution_speed < 0){
+    if (incident_resolution_speed < 0) {
       message += "La velocidad de resolución de incidentes no puede ser menor a cero (0).\n";
     }
 
-    if(!CheckFormatEmail.isValidEmail(mail)){
+    if (!CheckFormatEmail.isValidEmail(mail)) {
       message += "El email ingresado no es válido.\n";
     }
 
-    if(phone_number == null || phone_number.length() > 15){
+    if (phone_number == null || phone_number.length() > 15) {
       message += "El número de teléfono no es válido y puede tener un máximo de 15 dígitos.\n";
     }
 
-    if(medium == null){
+    if (medium == null) {
       message += "El técnico debe tener asignado un medio de comunicación.\n";
     }
 
-    if(specialties.size() == 0){
+    if (specialties.size() == 0) {
       message += "El técnico debe tener al menos una especialidad.\n";
     }
 
-    if(message != null){
+    if (message != null) {
       throw new RuntimeException(message);
     }
   }

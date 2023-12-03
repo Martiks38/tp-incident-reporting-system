@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface TechnicalDAO {
   Technical findById(Long id);
-  
+
   Technical findByName(String name);
 
   List<Technical> findAll();

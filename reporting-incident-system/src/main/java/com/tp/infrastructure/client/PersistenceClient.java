@@ -9,11 +9,11 @@ import com.tp.domain.client.ClientDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
-public class PersistenceClient implements ClientDAO{
+public class PersistenceClient implements ClientDAO {
 
   private static EntityManager manager;
 
-  public PersistenceClient(EntityManager mg){
+  public PersistenceClient(EntityManager mg) {
     manager = mg;
   }
 
@@ -46,11 +46,12 @@ public class PersistenceClient implements ClientDAO{
       transaction.commit();
 
     } catch (Exception e) {
-      if(transaction != null && transaction.isActive()){
+      if (transaction != null && transaction.isActive()) {
         transaction.rollback();
       }
 
-      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una base de datos que almacene los errores
+      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una
+      // base de datos que almacene los errores
       e.printStackTrace();
       System.err.println("Error en la transacción: " + e.getMessage());
     }
@@ -67,11 +68,12 @@ public class PersistenceClient implements ClientDAO{
 
       transaction.commit();
     } catch (Exception e) {
-      if(transaction != null && transaction.isActive()){
+      if (transaction != null && transaction.isActive()) {
         transaction.rollback();
       }
 
-      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una base de datos que almacene los errores
+      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una
+      // base de datos que almacene los errores
       e.printStackTrace();
       System.err.println("Error en la transacción: " + e.getMessage());
     }
@@ -85,19 +87,20 @@ public class PersistenceClient implements ClientDAO{
       transaction.begin();
 
       Client c = manager.find(Client.class, id);
-      
+
       manager.remove(c);
 
       transaction.commit();
     } catch (Exception e) {
-      if(transaction != null && transaction.isActive()){
+      if (transaction != null && transaction.isActive()) {
         transaction.rollback();
       }
 
-      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una base de datos que almacene los errores
+      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una
+      // base de datos que almacene los errores
       e.printStackTrace();
       System.err.println("Error en la transacción: " + e.getMessage());
     }
   }
-  
+
 }

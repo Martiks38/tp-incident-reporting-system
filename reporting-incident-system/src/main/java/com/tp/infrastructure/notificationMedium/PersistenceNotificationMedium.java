@@ -7,11 +7,11 @@ import com.tp.domain.notificationMedium.NotificationMediumDAO;
 
 import jakarta.persistence.EntityManager;
 
-public class PersistenceNotificationMedium implements NotificationMediumDAO{
+public class PersistenceNotificationMedium implements NotificationMediumDAO {
 
   private static EntityManager manager;
 
-  public PersistenceNotificationMedium(EntityManager mg){
+  public PersistenceNotificationMedium(EntityManager mg) {
     manager = mg;
   }
 
@@ -29,5 +29,5 @@ public class PersistenceNotificationMedium implements NotificationMediumDAO{
   public List<NotificationMedium> findAll() {
     return manager.createQuery("FROM NotificationMedium", NotificationMedium.class).getResultList();
   }
-  
+
 }

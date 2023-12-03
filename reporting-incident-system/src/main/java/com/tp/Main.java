@@ -29,16 +29,16 @@ public class Main {
 
             services.add(s);
 
-            // Client c = new Client("23142356312", "Maraviglioso Games S.A.", "contact@gmailmaravigliosogames.com", true, new ArrayList<>(), services);
-    
+            // Client c = new Client("23142356312", "Maraviglioso Games S.A.",
+            // "contact@gmailmaravigliosogames.com", true, new ArrayList<>(), services);
+
             // manager.persist(c);
             // tx.commit();
-    
-    
+
             List<Client> clients = (List<Client>) manager.createQuery("FROM Client", Client.class).getResultList();
-            
+
             clients.stream().forEach(client -> System.out.println(client.getBusiness_name()));
-            
+
             Client cliente = manager.find(Client.class, 4);
 
             tx.begin();
@@ -48,17 +48,17 @@ public class Main {
             manager.merge(cliente);
 
             tx.commit();
-            
+
         } catch (Exception e) {
-            if(tx != null && tx.isActive()){
+            if (tx != null && tx.isActive()) {
                 tx.rollback();
             }
 
-            // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una base de datos que almacene los errores
+            // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una
+            // base de datos que almacene los errores
             e.printStackTrace();
             System.err.println("Error en la transacción: " + e.getMessage());
         }
-
 
     }
 }

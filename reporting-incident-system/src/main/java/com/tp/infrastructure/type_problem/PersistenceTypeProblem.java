@@ -11,7 +11,7 @@ public class PersistenceTypeProblem implements TypeProblemDAO {
 
   private static EntityManager manager;
 
-  public PersistenceTypeProblem(EntityManager mg){
+  public PersistenceTypeProblem(EntityManager mg) {
     manager = mg;
   }
 
@@ -29,5 +29,5 @@ public class PersistenceTypeProblem implements TypeProblemDAO {
   public List<TypeProblem> findAll() {
     return manager.createQuery("FROM TypeProblem", TypeProblem.class).getResultList();
   }
-  
+
 }

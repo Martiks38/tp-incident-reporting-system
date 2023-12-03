@@ -36,11 +36,12 @@ public class Client {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long client_id;
 
-  public Client(Long id){
+  public Client(Long id) {
     client_id = id;
   }
 
-  public Client(String cuit, String business_name, String mail, boolean state, List<Incident> incidents, List<Service> client_services){
+  public Client(String cuit, String business_name, String mail, boolean state, List<Incident> incidents,
+      List<Service> client_services) {
     this.cuit = cuit;
     this.business_name = business_name;
     this.mail = mail;
@@ -76,10 +77,14 @@ public class Client {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof Client)) return false;
+    if (this == o)
+      return true;
+    if (!(o instanceof Client))
+      return false;
     Client client = (Client) o;
-    return state == client.state && Objects.equals(client_id, client.client_id) && Objects.equals(cuit, client.cuit) && Objects.equals(business_name, client.business_name) && Objects.equals(mail, client.mail) && Objects.equals(incidents, client.incidents) && Objects.equals(client_services, client.client_services);
+    return state == client.state && Objects.equals(client_id, client.client_id) && Objects.equals(cuit, client.cuit)
+        && Objects.equals(business_name, client.business_name) && Objects.equals(mail, client.mail)
+        && Objects.equals(incidents, client.incidents) && Objects.equals(client_services, client.client_services);
   }
 
 }

@@ -9,11 +9,11 @@ import com.tp.domain.technical.TechnicalDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
-public class PersistenceTechnicalDAO implements TechnicalDAO{
+public class PersistenceTechnicalDAO implements TechnicalDAO {
 
   private static EntityManager manager;
 
-  public PersistenceTechnicalDAO(EntityManager mg){
+  public PersistenceTechnicalDAO(EntityManager mg) {
     manager = mg;
   }
 
@@ -23,13 +23,13 @@ public class PersistenceTechnicalDAO implements TechnicalDAO{
   }
 
   @Override
-  public Technical findByName(String name){
+  public Technical findByName(String name) {
     return manager.find(Technical.class, name);
   }
 
   @Override
   public List<Technical> findAll() {
-    return  manager.createQuery("FROM Technical", Technical.class).getResultList();
+    return manager.createQuery("FROM Technical", Technical.class).getResultList();
   }
 
   @Override
@@ -46,11 +46,12 @@ public class PersistenceTechnicalDAO implements TechnicalDAO{
       transaction.commit();
 
     } catch (Exception e) {
-      if(transaction != null && transaction.isActive()){
+      if (transaction != null && transaction.isActive()) {
         transaction.rollback();
       }
 
-      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una base de datos que almacene los errores
+      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una
+      // base de datos que almacene los errores
       e.printStackTrace();
       System.err.println("Error en la transacción: " + e.getMessage());
     }
@@ -67,11 +68,12 @@ public class PersistenceTechnicalDAO implements TechnicalDAO{
 
       transaction.commit();
     } catch (Exception e) {
-      if(transaction != null && transaction.isActive()){
+      if (transaction != null && transaction.isActive()) {
         transaction.rollback();
       }
 
-      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una base de datos que almacene los errores
+      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una
+      // base de datos que almacene los errores
       e.printStackTrace();
       System.err.println("Error en la transacción: " + e.getMessage());
     }
@@ -85,16 +87,17 @@ public class PersistenceTechnicalDAO implements TechnicalDAO{
       transaction.begin();
 
       Technical t = manager.find(Technical.class, id);
-      
+
       manager.remove(t);
 
       transaction.commit();
     } catch (Exception e) {
-      if(transaction != null && transaction.isActive()){
+      if (transaction != null && transaction.isActive()) {
         transaction.rollback();
       }
 
-      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una base de datos que almacene los errores
+      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una
+      // base de datos que almacene los errores
       e.printStackTrace();
       System.err.println("Error en la transacción: " + e.getMessage());
     }

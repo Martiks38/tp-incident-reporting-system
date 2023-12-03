@@ -37,7 +37,7 @@ public class Technical {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long technical_id;
 
-  public Technical(Long id){
+  public Technical(Long id) {
     this.technical_id = id;
   }
 
@@ -59,7 +59,7 @@ public class Technical {
   @Setter
   @Column(nullable = false, length = 60)
   private String technical_name;
-  
+
   @Getter
   @Setter
   @Column(nullable = false)

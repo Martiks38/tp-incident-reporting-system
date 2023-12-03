@@ -7,13 +7,13 @@ import com.tp.domain.specialty.SpecialtyDAO;
 
 import jakarta.persistence.EntityManager;
 
-public class PersistenceSpecialty implements SpecialtyDAO{
+public class PersistenceSpecialty implements SpecialtyDAO {
 
   private static EntityManager manager;
 
-  public PersistenceSpecialty(EntityManager mg){
+  public PersistenceSpecialty(EntityManager mg) {
     manager = mg;
-  }  
+  }
 
   @Override
   public Specialty findById(Long id) {
@@ -29,5 +29,5 @@ public class PersistenceSpecialty implements SpecialtyDAO{
   public List<Specialty> findAll() {
     return manager.createQuery("FROM Specialty", Specialty.class).getResultList();
   }
-  
+
 }
