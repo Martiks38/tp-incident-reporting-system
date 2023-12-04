@@ -1,6 +1,9 @@
 package com.tp.domain.rrhh;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.tp.assets.Constant;
 import com.tp.domain.incident.Incident;
@@ -13,6 +16,31 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class Rrhh {
+
+  public static void technicianWithFasterIncidentResolution() {
+    final String persistenceUnitName = Constant.PERSISTENCE_UNIT_NAME;
+
+    EntityManagerFactory factory = Persistence.createEntityManagerFactory(persistenceUnitName);
+    EntityManager manager = factory.createEntityManager();
+
+    PersistenceTechnical conectionTechnical = new PersistenceTechnical(manager);
+
+    List<Technical> technicals = conectionTechnical.findAll();
+
+    Optional<Technical> technicianWithTheShortestTime = technicals.stream()
+        .filter(t -> t.getIncident_resolution_speed() != null)
+        .collect(Collectors.minBy(Comparator.comparing(Technical::getIncident_resolution_speed)));
+
+    if (technicianWithTheShortestTime.isPresent()) {
+      Technical technical = technicianWithTheShortestTime.get();
+
+      System.out.println("\nEl técnico que más rápido resolvió los incidentes es: " +
+          technical.getTechnical_name());
+    } else {
+      System.out.println("\nNo se encontro ningún técnico que haya resuelto incidentes.");
+    }
+
+  }
 
   public static void generateReport() {
     final String persistenceUnitName = Constant.PERSISTENCE_UNIT_NAME;
