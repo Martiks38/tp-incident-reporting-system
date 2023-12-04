@@ -13,6 +13,10 @@ import jakarta.persistence.Persistence;
 
 public class Main {
     public static void main(String[] args) {
+        TestFunciones();
+    }
+
+    public static void TestFunciones() {
         final String persistenceUnitName = "test-bd";
 
         EntityManagerFactory factory = Persistence.createEntityManagerFactory(persistenceUnitName);
@@ -59,6 +63,5 @@ public class Main {
             e.printStackTrace();
             System.err.println("Error en la transacción: " + e.getMessage());
         }
-
     }
 }
