@@ -7,7 +7,7 @@ public interface IncidentDAO {
 
   List<Incident> findAll();
 
-  void save(Long id, Incident data);
+  void save(Incident data);
 
   void update(Incident data);
 

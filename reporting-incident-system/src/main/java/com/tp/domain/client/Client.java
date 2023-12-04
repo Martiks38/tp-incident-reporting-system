@@ -25,7 +25,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@ToString
+
 @Getter
 @NoArgsConstructor
 @Table(name = "client", schema = "client")
@@ -87,4 +87,14 @@ public class Client {
         && Objects.equals(incidents, client.incidents) && Objects.equals(client_services, client.client_services);
   }
 
+  @Override
+  public String toString() {
+    return "Client{" +
+            "client_id=" + client_id +
+            ", cuit='" + cuit + '\'' +
+            ", business_name='" + business_name + '\'' +
+            ", mail='" + mail + '\'' +
+            ", state=" + state +
+            '}';
+  }
 }
