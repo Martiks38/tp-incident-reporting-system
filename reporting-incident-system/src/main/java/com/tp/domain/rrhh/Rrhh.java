@@ -5,23 +5,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.tp.assets.Constant;
+import com.tp.application.GetEntityManager;
 import com.tp.domain.incident.Incident;
 import com.tp.domain.technical.Technical;
 import com.tp.infrastructure.technical.PersistenceTechnical;
 import com.tp.utils.ModifyText;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 
 public class Rrhh {
 
   public static void technicianWithFasterIncidentResolution() {
-    final String persistenceUnitName = Constant.PERSISTENCE_UNIT_NAME;
-
-    EntityManagerFactory factory = Persistence.createEntityManagerFactory(persistenceUnitName);
-    EntityManager manager = factory.createEntityManager();
+    EntityManager manager = GetEntityManager.getManager();
 
     PersistenceTechnical conectionTechnical = new PersistenceTechnical(manager);
 
@@ -43,10 +38,7 @@ public class Rrhh {
   }
 
   public static void generateReport() {
-    final String persistenceUnitName = Constant.PERSISTENCE_UNIT_NAME;
-
-    EntityManagerFactory factory = Persistence.createEntityManagerFactory(persistenceUnitName);
-    EntityManager manager = factory.createEntityManager();
+    EntityManager manager = GetEntityManager.getManager();
 
     PersistenceTechnical conectionTechnical = new PersistenceTechnical(manager);
 

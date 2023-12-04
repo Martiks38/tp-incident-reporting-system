@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.hibernate.type.NumericBooleanConverter;
 
-import com.tp.assets.Constant;
+import com.tp.application.GetEntityManager;
 import com.tp.domain.incident.Incident;
 import com.tp.domain.notificationMedium.NotificationMedium;
 import com.tp.domain.specialty.Specialty;
@@ -15,7 +15,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +24,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
@@ -101,10 +99,7 @@ public class Technical {
   private List<Specialty> specialties;
 
   public void setPreferredNotificationMethod(String medium) {
-    final String persistenceUnitName = Constant.PERSISTENCE_UNIT_NAME;
-
-    EntityManagerFactory factory = Persistence.createEntityManagerFactory(persistenceUnitName);
-    EntityManager manager = factory.createEntityManager();
+    EntityManager manager = GetEntityManager.getManager();
     EntityTransaction transaction = manager.getTransaction();
 
     PersistenceNotificationMedium persistenceNotificationMedium = new PersistenceNotificationMedium(manager);
@@ -131,8 +126,6 @@ public class Technical {
       // base de datos que almacene los errores
       e.printStackTrace();
       System.err.println("Error en la transacción: " + e.getMessage());
-    } finally {
-      manager.close();
     }
   }
 
