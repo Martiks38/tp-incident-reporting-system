@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tp.domain.client.Client;
+import com.tp.domain.rrhh.Rrhh;
 import com.tp.domain.service.Service;
 
 import jakarta.persistence.EntityManager;
@@ -13,7 +14,7 @@ import jakarta.persistence.Persistence;
 
 public class Main {
     public static void main(String[] args) {
-        TestFunciones();
+        Rrhh.generateReport();
     }
 
     public static void TestFunciones() {
