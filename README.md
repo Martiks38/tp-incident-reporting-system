@@ -16,7 +16,7 @@
 
   - Quien fue el tecnico con mas incidentes resueltos en los ultimos N dias
   - Quien fue el tecnico con mas incidentes resueltos de una determinada especialidad en los ultimos N dias
-  - Quien fue el técnico que más rapido resolvio los incidentes
+  - [x] Quien fue el técnico que más rapido resolvio los incidentes
 
 ## Consideraciones
 
