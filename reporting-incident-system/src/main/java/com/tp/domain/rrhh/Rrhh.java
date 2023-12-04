@@ -1,13 +1,17 @@
 package com.tp.domain.rrhh;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import com.tp.application.GetEntityManager;
 import com.tp.domain.incident.Incident;
 import com.tp.domain.technical.Technical;
+import com.tp.infrastructure.incident.PersistenceIncident;
 import com.tp.infrastructure.technical.PersistenceTechnical;
 import com.tp.utils.ModifyText;
 
@@ -76,6 +80,43 @@ public class Rrhh {
         System.out.print("Estado: " + incidentState + "\n\n");
       });
     });
+  }
+
+  public static void technicianWithMostIncidentsForNDays(int days) {
+    EntityManager manager = GetEntityManager.getManager();
+
+    List<Incident> incidents = new PersistenceIncident(manager).findAll();
+
+    if (incidents.size() == 0) {
+      System.out.print("No se encontraron incidentes.");
+      return;
+    }
+
+    LocalDate currentDate = LocalDate.now();
+    LocalDate startDate = currentDate.minusDays(days);
+
+    Map<Technical, List<Incident>> incidentsResolvedInLastNDays = incidents.stream()
+        .filter(i -> {
+          LocalDate solutionDate = i.getTime_is_up().toLocalDate();
+
+          return solutionDate.isAfter(startDate);
+        })
+        .collect(Collectors.groupingBy(Incident::getTechnical));
+
+    Optional<Entry<Technical, List<Incident>>> technicalWithMostResolvedIncidentsInLastNDays = incidentsResolvedInLastNDays
+        .entrySet()
+        .stream().max(Comparator.comparingInt(entry -> entry.getValue().size()));
+
+    System.out.println(technicalWithMostResolvedIncidentsInLastNDays.get());
+    /*
+     * if (technicalWithMostResolvedIncidentsInLastNDays.isPresent()) {
+     * Technical technical =
+     * technicalWithMostResolvedIncidentsInLastNDays.get().getKey();
+     * 
+     * System.out.print(
+     * "El técnico que más incidentes resolvio en los últimos " + days + " es: " +
+     * technical.getTechnical_name());
+     */
   }
 
 }

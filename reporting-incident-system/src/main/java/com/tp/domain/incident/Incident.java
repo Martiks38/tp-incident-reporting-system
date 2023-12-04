@@ -41,13 +41,13 @@ public class Incident {
     this.incident_id = incident_id;
   }
 
-  public Incident(boolean resolved, String description, String considerations, Date create_time, Date time_us_up,
+  public Incident(boolean resolved, String description, String considerations, Date create_time, Date time_is_up,
       boolean state, Technical technical, Client client, List<TypeProblem> incident_type_problem) {
     this.resolved = resolved;
     this.description = description;
     this.considerations = considerations;
     this.create_time = create_time;
-    this.time_us_up = time_us_up;
+    this.time_is_up = time_is_up;
     this.state = state;
     this.technical = technical;
     this.client = client;
@@ -74,7 +74,7 @@ public class Incident {
 
   @Setter
   @Temporal(TemporalType.DATE)
-  private Date time_us_up;
+  private Date time_is_up;
 
   @Setter
   @Convert(converter = NumericBooleanConverter.class)
