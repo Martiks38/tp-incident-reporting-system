@@ -65,7 +65,7 @@ public class Client {
   @Setter
   @Convert(converter = NumericBooleanConverter.class)
   @Column(nullable = false)
-  private boolean state;
+  private Boolean state;
 
   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
   private List<Incident> incidents;

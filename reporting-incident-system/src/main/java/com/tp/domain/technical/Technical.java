@@ -78,7 +78,7 @@ public class Technical {
   @Setter
   @Convert(converter = NumericBooleanConverter.class)
   @Column(nullable = false)
-  private boolean state;
+  private Boolean state;
 
   @Setter
   @OneToMany(mappedBy = "technical")

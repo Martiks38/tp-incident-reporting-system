@@ -37,17 +37,34 @@ public class Incident {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long incident_id;
 
+  public Incident(Long incident_id) {
+    this.incident_id = incident_id;
+  }
+
+  public Incident(boolean resolved, String description, String considerations, Date create_time, Date time_us_up,
+      boolean state, Technical technical, Client client, List<TypeProblem> incident_type_problem) {
+    this.resolved = resolved;
+    this.description = description;
+    this.considerations = considerations;
+    this.create_time = create_time;
+    this.time_us_up = time_us_up;
+    this.state = state;
+    this.technical = technical;
+    this.client = client;
+    this.incident_type_problem = incident_type_problem;
+  }
+
   @Setter
   @Convert(converter = NumericBooleanConverter.class)
   @Column(nullable = false)
-  private boolean resolved;
+  private Boolean resolved;
 
   @Setter
   @Column(nullable = false)
   private String description;
 
   @Setter
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String considerations;
 
   @Setter
@@ -62,7 +79,7 @@ public class Incident {
   @Setter
   @Convert(converter = NumericBooleanConverter.class)
   @Column(nullable = false)
-  private boolean state;
+  private Boolean state;
 
   @Setter
   @ManyToOne(cascade = CascadeType.ALL)
