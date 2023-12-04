@@ -23,7 +23,3 @@
 - [ ] Cada tipo de problema particular puede ser solucionado por una o varias especialidades
 - [ ] Cada operador puede definir, optativamente, su tiempo estimado de resolucion por defecto por tipo de problema; el cual tendrá que ser menor al tiempo máximo de resolución definido para el tipo de problema.
 - [x] Cada tecnico puede definir su medio preferido de notificación, los cuales pueden ser email o whatsapp.
-
-## EntityManager
-
-- Extraer de las entidades el entitymanager
