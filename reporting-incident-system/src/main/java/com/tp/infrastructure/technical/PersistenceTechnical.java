@@ -9,11 +9,11 @@ import com.tp.domain.technical.TechnicalDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
-public class PersistenceTechnicalDAO implements TechnicalDAO {
+public class PersistenceTechnical implements TechnicalDAO {
 
   private static EntityManager manager;
 
-  public PersistenceTechnicalDAO(EntityManager mg) {
+  public PersistenceTechnical(EntityManager mg) {
     manager = mg;
   }
 
