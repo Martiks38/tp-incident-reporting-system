@@ -1,10 +1,10 @@
 # TODO
 
-- Hacer README
-- Hacer que admita NULL considerations en Incident en la db.
-- Diseñar área comercial
-- Añadir crud de tecnico a RRHH
-- Realizar ciclo de vida de incidente
+- [ ] Hacer README
+- [ ] Hacer que admita NULL considerations en Incident en la db.
+- [ ] Diseñar área comercial
+- [ ] Añadir crud de tecnico a RRHH
+- [ ] Realizar ciclo de vida de incidente
 
 ## Otros requerimientos
 
@@ -14,8 +14,8 @@
 
 - [ ] El sistema debe dar la posibilidad de informar:
 
-  - Quien fue el tecnico con mas incidentes resueltos en los ultimos N dias
-  - Quien fue el tecnico con mas incidentes resueltos de una determinada especialidad en los ultimos N dias
+  - [ ] (En proceso) Quien fue el tecnico con mas incidentes resueltos en los ultimos N dias
+  - [ ] (En proceso) Quien fue el tecnico con mas incidentes resueltos de una determinada especialidad en los ultimos N dias
   - [x] Quien fue el técnico que más rapido resolvio los incidentes
 
 ## Consideraciones
