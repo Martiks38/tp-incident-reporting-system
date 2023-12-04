@@ -4,14 +4,19 @@ import java.util.List;
 
 import org.hibernate.type.NumericBooleanConverter;
 
+import com.tp.assets.Constant;
 import com.tp.domain.incident.Incident;
 import com.tp.domain.notificationMedium.NotificationMedium;
 import com.tp.domain.specialty.Specialty;
+import com.tp.infrastructure.notificationMedium.PersistenceNotificationMedium;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,6 +25,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Persistence;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
@@ -93,4 +99,41 @@ public class Technical {
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "technical__specialty", joinColumns = @JoinColumn(name = "fk_ts_technical"), inverseJoinColumns = @JoinColumn(name = "fk_ts_specialty"))
   private List<Specialty> specialties;
+
+  public void setPreferredNotificationMethod(String medium) {
+    final String persistenceUnitName = Constant.PERSISTENCE_UNIT_NAME;
+
+    EntityManagerFactory factory = Persistence.createEntityManagerFactory(persistenceUnitName);
+    EntityManager manager = factory.createEntityManager();
+    EntityTransaction transaction = manager.getTransaction();
+
+    PersistenceNotificationMedium persistenceNotificationMedium = new PersistenceNotificationMedium(manager);
+
+    NotificationMedium notificationMedium = persistenceNotificationMedium.findByName(medium);
+
+    try {
+      transaction.begin();
+
+      if (notificationMedium == null) {
+        throw new RuntimeException("No existe el medio de notificación solicitado.\n");
+      }
+
+      this.setMedium(notificationMedium);
+      manager.merge(this);
+
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction != null && transaction.isActive()) {
+        transaction.rollback();
+      }
+
+      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una
+      // base de datos que almacene los errores
+      e.printStackTrace();
+      System.err.println("Error en la transacción: " + e.getMessage());
+    } finally {
+      manager.close();
+    }
+  }
+
 }
