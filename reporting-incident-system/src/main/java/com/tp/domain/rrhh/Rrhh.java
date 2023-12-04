@@ -96,6 +96,7 @@ public class Rrhh {
     LocalDate startDate = currentDate.minusDays(days);
 
     Map<Technical, List<Incident>> incidentsResolvedInLastNDays = incidents.stream()
+        .filter(i -> i.getTime_is_up() != null)
         .filter(i -> {
           LocalDate solutionDate = i.getTime_is_up().toLocalDate();
 
@@ -107,16 +108,15 @@ public class Rrhh {
         .entrySet()
         .stream().max(Comparator.comparingInt(entry -> entry.getValue().size()));
 
-    System.out.println(technicalWithMostResolvedIncidentsInLastNDays.get());
-    /*
-     * if (technicalWithMostResolvedIncidentsInLastNDays.isPresent()) {
-     * Technical technical =
-     * technicalWithMostResolvedIncidentsInLastNDays.get().getKey();
-     * 
-     * System.out.print(
-     * "El técnico que más incidentes resolvio en los últimos " + days + " es: " +
-     * technical.getTechnical_name());
-     */
+    if (technicalWithMostResolvedIncidentsInLastNDays.isPresent()) {
+      Technical technical = technicalWithMostResolvedIncidentsInLastNDays.get().getKey();
+      String name = technical.getTechnical_name();
+
+      System.out.print("\nEl técnico que más incidentes resolvió en los últimos " + days + " días es: " + name + ".\n");
+    } else {
+      System.out
+          .print("\nNo se encontraron técnicos que hayan resuelto incidentes durante los últimos " + days + " días.\n");
+    }
   }
 
 }
