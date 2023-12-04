@@ -6,6 +6,11 @@ import com.tp.domain.specialty.Specialty;
 import com.tp.domain.specialty.SpecialtyDAO;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 public class PersistenceSpecialty implements SpecialtyDAO {
 
@@ -22,7 +27,19 @@ public class PersistenceSpecialty implements SpecialtyDAO {
 
   @Override
   public Specialty findByName(String name) {
-    return manager.find(Specialty.class, name);
+    CriteriaBuilder cb = manager.getCriteriaBuilder();
+    CriteriaQuery<Specialty> query = cb.createQuery(Specialty.class);
+    Root<Specialty> root = query.from(Specialty.class);
+
+    query.select(root).where(cb.equal(root.get("specialty_name"), name));
+
+    TypedQuery<Specialty> typedQuery = manager.createQuery(query);
+
+    try {
+      return typedQuery.getSingleResult();
+    } catch (NoResultException e) {
+      return null;
+    }
   }
 
   @Override

@@ -8,6 +8,11 @@ import com.tp.domain.technical.TechnicalDAO;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 public class PersistenceTechnical implements TechnicalDAO {
 
@@ -24,7 +29,19 @@ public class PersistenceTechnical implements TechnicalDAO {
 
   @Override
   public Technical findByName(String name) {
-    return manager.find(Technical.class, name);
+    CriteriaBuilder cb = manager.getCriteriaBuilder();
+    CriteriaQuery<Technical> query = cb.createQuery(Technical.class);
+    Root<Technical> root = query.from(Technical.class);
+
+    query.select(root).where(cb.equal(root.get("technical_name"), name));
+
+    TypedQuery<Technical> typedQuery = manager.createQuery(query);
+
+    try {
+      return typedQuery.getSingleResult();
+    } catch (NoResultException e) {
+      return null;
+    }
   }
 
   @Override

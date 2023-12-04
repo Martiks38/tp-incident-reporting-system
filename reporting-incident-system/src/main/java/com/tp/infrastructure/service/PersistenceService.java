@@ -7,6 +7,11 @@ import com.tp.domain.service.Service;
 import com.tp.domain.service.ServiceDAO;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 public class PersistenceService implements ServiceDAO {
 
@@ -31,15 +36,19 @@ public class PersistenceService implements ServiceDAO {
 
   @Override
   public Service findByName(String name) {
-    Service service = new Service();
+    CriteriaBuilder cb = manager.getCriteriaBuilder();
+    CriteriaQuery<Service> query = cb.createQuery(Service.class);
+    Root<Service> root = query.from(Service.class);
+
+    query.select(root).where(cb.equal(root.get("service_name"), name));
+
+    TypedQuery<Service> typedQuery = manager.createQuery(query);
 
     try {
-      service = manager.find(Service.class, name);
-    } catch (Exception e) {
-      System.err.println(e.getMessage());
+      return typedQuery.getSingleResult();
+    } catch (NoResultException e) {
+      return null;
     }
-
-    return service;
   }
 
   @Override

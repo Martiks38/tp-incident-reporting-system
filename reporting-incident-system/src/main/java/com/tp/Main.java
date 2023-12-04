@@ -26,9 +26,13 @@ import jakarta.persistence.Persistence;
 
 public class Main {
     public static void main(String[] args) {
-        Rrhh.generateReport();
-        Rrhh.technicianWithFasterIncidentResolution();
-        TestFunciones();
+        final int days = 7;
+        final String specialty_name = "training";
+
+        // Rrhh.generateReport();
+        // Rrhh.technicianWithFasterIncidentResolution();
+        // Rrhh.technicianWithMostIncidentsForNDays(days);
+        Rrhh.technicianWithMostIncidentsForNDaysBySpecialty(days, specialty_name);
     }
 
     public static void TestFunciones() {

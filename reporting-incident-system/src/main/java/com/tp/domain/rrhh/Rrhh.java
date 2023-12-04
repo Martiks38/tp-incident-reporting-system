@@ -1,13 +1,20 @@
 package com.tp.domain.rrhh;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import com.tp.application.GetEntityManager;
+import com.tp.assets.Constant;
 import com.tp.domain.incident.Incident;
+import com.tp.domain.specialty.Specialty;
 import com.tp.domain.technical.Technical;
+import com.tp.infrastructure.incident.PersistenceIncident;
+import com.tp.infrastructure.specialty.PersistenceSpecialty;
 import com.tp.infrastructure.technical.PersistenceTechnical;
 import com.tp.utils.ModifyText;
 
@@ -71,11 +78,93 @@ public class Rrhh {
 
         System.out.print("Incidente: " + id + "\n");
         System.out.print("Descripción\n");
-        ModifyText.LimitCharacterLine(description, 80);
+        ModifyText.LimitCharacterLine(description, Constant.LIMIT_CHARACTER_TEXT_CONSOLE);
         System.out.print("\n");
         System.out.print("Estado: " + incidentState + "\n\n");
       });
     });
   }
 
+  public static void technicianWithMostIncidentsForNDays(int days) {
+    EntityManager manager = GetEntityManager.getManager();
+
+    List<Incident> incidents = new PersistenceIncident(manager).findAll();
+
+    if (incidents.size() == 0) {
+      System.out.print("No se encontraron incidentes.");
+      return;
+    }
+
+    LocalDate currentDate = LocalDate.now();
+    LocalDate startDate = currentDate.minusDays(days);
+
+    Map<Technical, List<Incident>> incidentsResolvedInLastNDays = incidents.stream()
+        .filter(i -> i.getTime_is_up() != null)
+        .filter(i -> {
+          LocalDate solutionDate = i.getTime_is_up().toLocalDate();
+
+          return solutionDate.isAfter(startDate);
+        })
+        .collect(Collectors.groupingBy(Incident::getTechnical));
+
+    Optional<Entry<Technical, List<Incident>>> technicalWithMostResolvedIncidentsInLastNDays = incidentsResolvedInLastNDays
+        .entrySet()
+        .stream().max(Comparator.comparingInt(entry -> entry.getValue().size()));
+
+    if (technicalWithMostResolvedIncidentsInLastNDays.isPresent()) {
+      Technical technical = technicalWithMostResolvedIncidentsInLastNDays.get().getKey();
+      String name = technical.getTechnical_name();
+
+      System.out.print("\nEl técnico que más incidentes resolvió en los últimos " + days + " días es: " + name + ".\n");
+    } else {
+      System.out
+          .print("\nNo se encontraron técnicos que hayan resuelto incidentes durante los últimos " + days + " días.\n");
+    }
+  }
+
+  public static void technicianWithMostIncidentsForNDaysBySpecialty(int days, String specialty_name) {
+    EntityManager manager = GetEntityManager.getManager();
+
+    List<Incident> incidents = new PersistenceIncident(manager).findAll();
+
+    if (incidents.size() == 0) {
+      System.out.print("No se encontraron incidentes.");
+      return;
+    }
+
+    LocalDate currentDate = LocalDate.now();
+    LocalDate startDate = currentDate.minusDays(days);
+    Specialty specialty = new PersistenceSpecialty(manager).findByName(specialty_name);
+
+    if (specialty == null) {
+      System.out.print("\nNo se hayo la especialidad pedida.");
+      return;
+    }
+
+    Map<Technical, List<Incident>> incidentsResolvedInLastNDays = incidents.stream()
+        .filter(i -> i.getTime_is_up() != null)
+        .filter(i -> {
+          LocalDate solutionDate = i.getTime_is_up().toLocalDate();
+          Technical technical = i.getTechnical();
+
+          return solutionDate.isAfter(startDate) && technical.getSpecialties().contains(specialty);
+        })
+        .collect(Collectors.groupingBy(Incident::getTechnical));
+
+    Optional<Entry<Technical, List<Incident>>> technicalWithMostResolvedIncidentsInLastNDays = incidentsResolvedInLastNDays
+        .entrySet()
+        .stream().max(Comparator.comparingInt(entry -> entry.getValue().size()));
+
+    if (technicalWithMostResolvedIncidentsInLastNDays.isPresent()) {
+      Technical technical = technicalWithMostResolvedIncidentsInLastNDays.get().getKey();
+      String name = technical.getTechnical_name();
+
+      System.out.print("\nEl técnico que más incidentes resolvió en los últimos " + days
+          + " días, en la especialidad de " + specialty_name + " es: " + name + ".\n");
+    } else {
+      System.out
+          .print("\nNo se encontraron técnicos que hayan resuelto incidentes durante los últimos " + days
+              + " días para la espacialidad de" + specialty_name + ".\n");
+    }
+  }
 }
