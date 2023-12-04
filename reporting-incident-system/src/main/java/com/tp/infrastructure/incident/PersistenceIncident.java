@@ -45,8 +45,6 @@ public class PersistenceIncident implements IncidentDAO {
         transaction.rollback();
       }
 
-      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una
-      // base de datos que almacene los errores
       e.printStackTrace();
       System.err.println("Error en la transacción: " + e.getMessage());
     }
@@ -67,10 +65,9 @@ public class PersistenceIncident implements IncidentDAO {
         transaction.rollback();
       }
 
-      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una
-      // base de datos que almacene los errores
+
       e.printStackTrace();
-      System.err.println("Error en la transacción: " + e.getMessage());
+      System.err.println("Error en la transacci�n: " + e.getMessage());
     }
   }
 
@@ -91,10 +88,9 @@ public class PersistenceIncident implements IncidentDAO {
         transaction.rollback();
       }
 
-      // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una
-      // base de datos que almacene los errores
+
       e.printStackTrace();
-      System.err.println("Error en la transacción: " + e.getMessage());
+      System.err.println("Error en la transacci�n: " + e.getMessage());
     }
   }
 

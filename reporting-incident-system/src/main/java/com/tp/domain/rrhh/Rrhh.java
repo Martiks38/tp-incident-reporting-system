@@ -15,67 +15,75 @@ import jakarta.persistence.EntityManager;
 
 public class Rrhh {
 
-  public static void technicianWithFasterIncidentResolution() {
-    EntityManager manager = GetEntityManager.getManager();
+      private static final int DESCRIPTION_LIMIT = 80;
 
-    PersistenceTechnical conectionTechnical = new PersistenceTechnical(manager);
-
-    List<Technical> technicals = conectionTechnical.findAll();
-
-    Optional<Technical> technicianWithTheShortestTime = technicals.stream()
-        .filter(t -> t.getIncident_resolution_speed() != null)
-        .collect(Collectors.minBy(Comparator.comparing(Technical::getIncident_resolution_speed)));
-
-    if (technicianWithTheShortestTime.isPresent()) {
-      Technical technical = technicianWithTheShortestTime.get();
-
-      System.out.println("\nEl t√©cnico que m√°s r√°pido resolvi√≥ los incidentes es: " +
-          technical.getTechnical_name());
-    } else {
-      System.out.println("\nNo se encontro ning√∫n t√©cnico que haya resuelto incidentes.");
+    public static void technicianWithFasterIncidentResolution() {
+        EntityManager manager = getEntityManager();
+        PersistenceTechnical connectionTechnical = new PersistenceTechnical(manager);
+        List<Technical> technicals = connectionTechnical.findAll();
+        Optional<Technical> technicianWithTheShortestTime = findTechnicianWithShortestTime(technicals);
+        if (technicianWithTheShortestTime.isPresent()) {
+            Technical technical = technicianWithTheShortestTime.get();
+            System.out.println("\nEl tÈcnico que m·s r·pido resolviÛ los incidentes es: "
+                    + technical.getTechnical_name());
+        } else {
+            System.out.println("\nNo se encontrÛ ning˙n tÈcnico que haya resuelto incidentes.");
+        }
     }
 
-  }
-
-  public static void generateReport() {
-    EntityManager manager = GetEntityManager.getManager();
-
-    PersistenceTechnical conectionTechnical = new PersistenceTechnical(manager);
-
-    List<Technical> technicals = conectionTechnical.findAll();
-
-    System.out.print("\n\n\n");
-
-    if (technicals.size() == 0) {
-      System.out.print("No se encontraron t√©cnicos.");
-      return;
+    private static Optional<Technical> findTechnicianWithShortestTime(List<Technical> technicals) {
+        return technicals.stream()
+                .filter(t -> t.getIncident_resolution_speed() != null)
+                .min(Comparator.comparing(Technical::getIncident_resolution_speed));
     }
 
-    technicals.forEach(technical -> {
-      String technical_name = technical.getTechnical_name();
-      List<Incident> incidents = technical.getIncidents();
+    public static void generateReport() {
+        EntityManager manager = getEntityManager();
+        PersistenceTechnical connectionTechnical = new PersistenceTechnical(manager);
+        List<Technical> technicals = connectionTechnical.findAll();
 
-      System.out.print("T√©cnico: " + technical_name + "\n");
-      System.out.print("Incidentes\n");
+        System.out.print("\n\n\n");
 
-      if (incidents.size() == 0) {
-        System.out.println("No tiene ning√∫n incidente asignado.\n\n");
-        return;
-      }
+        if (technicals.isEmpty()) {
+            System.out.print("No se encontraron tÈcnicos.");
+            return;
+        }
 
-      incidents.forEach(incident -> {
+        technicals.forEach(technical -> {
+            printTechnicianReport(technical);
+        });
+    }
+
+    private static void printTechnicianReport(Technical technical) {
+        String technicalName = technical.getTechnical_name();
+        List<Incident> incidents = technical.getIncidents();
+
+        System.out.print("TÈcnico: " + technicalName + "\n");
+        System.out.print("Incidentes\n");
+
+        if (incidents.isEmpty()) {
+            System.out.println("No tiene ning˙n incidente asignado.\n\n");
+            return;
+        }
+
+        incidents.forEach(incident -> {
+            printIncidentDetails(incident);
+        });
+    }
+
+    private static void printIncidentDetails(Incident incident) {
         Long id = incident.getIncident_id();
         String description = incident.getDescription();
         boolean isResolved = incident.getResolved();
         String incidentState = isResolved ? "RESUELTO" : "PENDIENTE";
-
         System.out.print("Incidente: " + id + "\n");
-        System.out.print("Descripci√≥n\n");
-        ModifyText.LimitCharacterLine(description, 80);
+        System.out.print("DescripciÛn\n");
+        ModifyText.LimitCharacterLine(description, DESCRIPTION_LIMIT);
         System.out.print("\n");
         System.out.print("Estado: " + incidentState + "\n\n");
-      });
-    });
-  }
+    }
 
+    private static EntityManager getEntityManager() {
+        return GetEntityManager.getManager();
+    }
 }
