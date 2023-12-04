@@ -6,6 +6,11 @@ import com.tp.domain.notificationMedium.NotificationMedium;
 import com.tp.domain.notificationMedium.NotificationMediumDAO;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 public class PersistenceNotificationMedium implements NotificationMediumDAO {
 
@@ -22,7 +27,19 @@ public class PersistenceNotificationMedium implements NotificationMediumDAO {
 
   @Override
   public NotificationMedium findByName(String name) {
-    return manager.find(NotificationMedium.class, name);
+    CriteriaBuilder cb = manager.getCriteriaBuilder();
+    CriteriaQuery<NotificationMedium> query = cb.createQuery(NotificationMedium.class);
+    Root<NotificationMedium> root = query.from(NotificationMedium.class);
+
+    query.select(root).where(cb.equal(root.get("medium"), name));
+
+    TypedQuery<NotificationMedium> typedQuery = manager.createQuery(query);
+
+    try {
+      return typedQuery.getSingleResult();
+    } catch (NoResultException e) {
+      return null;
+    }
   }
 
   @Override

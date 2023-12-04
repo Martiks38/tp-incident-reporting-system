@@ -8,6 +8,11 @@ import com.tp.domain.client.ClientDAO;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 public class PersistenceClient implements ClientDAO {
 
@@ -24,7 +29,19 @@ public class PersistenceClient implements ClientDAO {
 
   @Override
   public Client findByName(String name) {
-    return manager.find(Client.class, name);
+    CriteriaBuilder cb = manager.getCriteriaBuilder();
+    CriteriaQuery<Client> query = cb.createQuery(Client.class);
+    Root<Client> root = query.from(Client.class);
+
+    query.select(root).where(cb.equal(root.get("business_name"), name));
+
+    TypedQuery<Client> typedQuery = manager.createQuery(query);
+
+    try {
+      return typedQuery.getSingleResult();
+    } catch (NoResultException e) {
+      return null;
+    }
   }
 
   @Override
