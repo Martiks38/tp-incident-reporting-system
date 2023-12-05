@@ -13,7 +13,7 @@ El proyecto consiste en el diseño y desarrollo de un sistema integral para la g
 
 Diagrama de la base datos solución
 
-![Diagrama de las entidades y relaciones propuestas para la solución](doc/diagram.png)
+![Diagrama de las entidades y relaciones propuestas para la solución](db/diagram.png)
 
 ### Funcionalidades Principales
 
