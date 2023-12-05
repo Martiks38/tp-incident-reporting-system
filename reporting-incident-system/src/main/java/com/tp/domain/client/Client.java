@@ -65,6 +65,7 @@ public class Client {
   @Column(nullable = false)
   private Boolean state;
 
+  @Setter
   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
   private List<Incident> incidents;
 
