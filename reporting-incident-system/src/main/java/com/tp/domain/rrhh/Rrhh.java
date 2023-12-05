@@ -30,7 +30,7 @@ public class Rrhh {
 
     List<Technical> technicals = conectionTechnical.findAll()
         .stream()
-        .filter(t -> t.getState())
+        .filter(Technical::getState)
         .collect(Collectors.toList());
 
     System.out.print("\n\n\n");
@@ -44,7 +44,7 @@ public class Rrhh {
       String technical_name = technical.getTechnical_name();
       List<Incident> incidents = technical.getIncidents()
           .stream()
-          .filter(i -> i.getState())
+          .filter(Incident::getState)
           .collect(Collectors.toList());
 
       System.out.print("Técnico: " + technical_name + "\n");
@@ -90,7 +90,6 @@ public class Rrhh {
     } else {
       System.out.println("\nNo se encontro ningún técnico que haya resuelto incidentes.");
     }
-
   }
 
   public static void technicianWithMostIncidentsForNDays(int days) {
@@ -98,7 +97,7 @@ public class Rrhh {
 
     List<Incident> incidents = new PersistenceIncident(manager).findAll()
         .stream()
-        .filter(i -> i.getState())
+        .filter(Incident::getState)
         .collect(Collectors.toList());
 
     if (incidents.size() == 0) {
@@ -138,7 +137,7 @@ public class Rrhh {
 
     List<Incident> incidents = new PersistenceIncident(manager).findAll()
         .stream()
-        .filter(i -> i.getState())
+        .filter(Incident::getState)
         .collect(Collectors.toList());
 
     if (incidents.size() == 0) {
