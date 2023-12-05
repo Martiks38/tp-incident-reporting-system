@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import com.tp.application.GetEntityManager;
+import com.tp.assets.ActionTechnical;
 import com.tp.assets.Constant;
 import com.tp.domain.incident.Incident;
 import com.tp.domain.specialty.Specialty;
@@ -165,6 +166,24 @@ public class Rrhh {
       System.out
           .print("\nNo se encontraron técnicos que hayan resuelto incidentes durante los últimos " + days
               + " días para la espacialidad de" + specialty_name + ".\n");
+    }
+  }
+
+  static void handlerTechnical(Technical technical, ActionTechnical action, Long id) {
+    EntityManager manager = GetEntityManager.getManager();
+
+    PersistenceTechnical conectionTechnical = new PersistenceTechnical(manager);
+
+    if (action == ActionTechnical.CREATE_TECHNICAL) {
+      conectionTechnical.save(technical);
+    }
+
+    if (action == ActionTechnical.REMOVE_TECHNICAL) {
+      conectionTechnical.delete(id);
+    }
+
+    if (action == ActionTechnical.UPDATE_TECHNICAL) {
+      conectionTechnical.update(technical);
     }
   }
 }
