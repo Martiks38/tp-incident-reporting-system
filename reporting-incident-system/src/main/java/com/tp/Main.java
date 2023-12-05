@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.tp.application.GetEntityManager;
 import com.tp.application.Notification;
 import com.tp.application.notificationEmail;
 import com.tp.domain.client.Client;
@@ -20,9 +21,7 @@ import com.tp.infrastructure.incident.PersistenceIncident;
 import com.tp.infrastructure.technical.PersistenceTechnical;
 import com.tp.infrastructure.type_problem.PersistenceTypeProblem;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
 
 public class Main {
     public static void main(String[] args) {
@@ -84,11 +83,7 @@ public class Main {
     }
 
     public static void CreateIncident() {
-        final String persistenceUnitName = "test-bd";
-
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory(persistenceUnitName);
-
-        EntityManager manager = factory.createEntityManager();
+        EntityManager manager = GetEntityManager.getManager();
 
         EntityTransaction tx = manager.getTransaction();
 
