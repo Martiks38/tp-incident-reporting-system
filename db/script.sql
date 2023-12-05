@@ -161,6 +161,7 @@
     `create_time` TIMESTAMP NOT NULL,
     `time_is_up` TIMESTAMP NULL DEFAULT NULL,
 	state TINYINT NOT NULL,
+    `fk_service_id` BIGINT,
     PRIMARY KEY (`id`),
     INDEX `fk_client_id` (`fk_client_id` ASC) VISIBLE,
     INDEX `fk_technical_id` (`fk_technical_id` ASC) VISIBLE,
@@ -172,6 +173,11 @@
     CONSTRAINT `fk_technical_id`
       FOREIGN KEY (`fk_technical_id`)
       REFERENCES `incident-reporting-system`.`technical` (`id`)
+      ON DELETE SET NULL
+      ON UPDATE SET NULL,
+	CONSTRAINT `fk_service_id`
+      FOREIGN KEY (`fk_service_id`)
+      REFERENCES `incident-reporting-system`.`service` (`id`)
       ON DELETE SET NULL
       ON UPDATE SET NULL);
 
@@ -203,22 +209,21 @@
   -- -----------------------------------------------------
   DROP TABLE IF EXISTS `incident-reporting-system`.`incident__type_problem` ;
 
-  CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`incident__type_problem` (
-    `fk_ip_incident` BIGINT,
-    `fk_ip_type_problem` BIGINT,
-    INDEX `fk_ip_incident` (`fk_ip_incident` ASC) VISIBLE,
-    INDEX `fk_ip_type_problem` (`fk_ip_type_problem` ASC) VISIBLE,
-    CONSTRAINT `fk_ip_incident`
-      FOREIGN KEY (`fk_ip_incident`)
-      REFERENCES `incident-reporting-system`.`incident` (`id`)
-      ON DELETE SET NULL
-      ON UPDATE SET NULL,
-    CONSTRAINT `fk_ip_type_problem`
-      FOREIGN KEY (`fk_ip_type_problem`)
-      REFERENCES `incident-reporting-system`.`type_problem` (`id`)
-      ON DELETE SET NULL
-      ON UPDATE SET NULL);
-
+CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`incident__type_problem` (
+  `fk_itp_incident` BIGINT NULL DEFAULT NULL,
+  `fk_itp_type_problem` BIGINT NULL DEFAULT NULL,
+  INDEX `fk_itp_incident` (`fk_itp_incident` ASC) VISIBLE,
+  INDEX `fk_itp_type_problem` (`fk_itp_type_problem` ASC) VISIBLE,
+  CONSTRAINT `fk_itp_incident`
+    FOREIGN KEY (`fk_itp_incident`)
+    REFERENCES `incident-reporting-system`.`incident` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE SET NULL,
+  CONSTRAINT `fk_itp_type_problem`
+    FOREIGN KEY (`fk_itp_type_problem`)
+    REFERENCES `incident-reporting-system`.`type_problem` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE SET NULL);
 
   -- -----------------------------------------------------
   -- Table `incident-reporting-system`.`service__type_problem`
@@ -260,7 +265,7 @@
       (1, "Maider Gomez", 2, 14400043, "maidergomez@gmail.com", "3476123456", 1, 1),
       (2, "Gheorghe Galindo", 5, 32400000, "gheorghe.galindo@hotmail.com", "3411234567", 2, 1),
       (3, "Cesareo Gutierrez", 1, 14400981, "cesareo@gutierrez.com", "1112345678", 1, 1),
-      (4, "Alejandra Puerta", 0, null, "alejandra_puerta@outlook.com", "3421234567", 2, 1);
+      (4, "Alejandra Puerta", 0, null, "alejandra_puerta@outlook.com", "3421234567", 2, 0);
 
   INSERT INTO `incident-reporting-system`.specialty
     VALUES
@@ -340,17 +345,25 @@
       
   INSERT INTO `incident-reporting-system`.incident
     VALUES
-      (1, 'Los usuarios experimentan problemas intermitentes de conexión a la red, lo que resulta en la imposibilidad de acceder a servicios en línea o compartir archivos de manera efectiva.', 'Problemas intermitentes de conexión afectan la accesibilidad a servicios en línea y la eficacia en la compartición de archivos. Se requiere diagnóstico exhaustivo, considerando enrutador, posibles interferencias y configuraciones de firewall.', 1, 1, 0, '2023-11-24 16:13:34', null, 1),
-      (2, 'Se ha detectado un intento de acceso no autorizado a sistemas críticos de la empresa, lo que representa una amenaza potencial para la integridad y la confidencialidad de los datos.', 'Reporte de usuarios con errores al acceder a la base de datos, impactando aplicaciones dependientes. Se requiere revisión y corrección de consultas, asegurando la integridad de datos y optimizando el rendimiento.', 4, 3, 0, '2023-11-18 20:13:34', null, 1),
-      (3, 'Los usuarios informan errores al intentar acceder o manipular datos en la base de datos, lo que afecta la funcionalidad de las aplicaciones que dependen de la información almacenada.', 'Usuarios reportan errores en acceso y manipulación de datos en la base, afectando aplicaciones dependientes. Se necesita revisar y corregir consultas para garantizar la integridad y optimizar el rendimiento.', 4, 2, 0, '2023-11-20 01:13:34', null, 1),
-      (4, "Desafíos en el entrenamiento del modelo, resultando en baja precisión y rendimiento insatisfactorio.", "Optimizar el conjunto de datos, ajustar parámetros del modelo y aplicar técnicas avanzadas de entrenamiento para mejorar la calidad del modelo.", 3, 2, 1, "2023-11-24", "2023-12-3", 1),
-      (5, "Fallo en la integración de sistemas, causando pérdida de datos y disrupciones en los servicios.", "Implementar un middleware robusto, mejorar la validación de datos y establecer monitoreo en tiempo real para prevenir futuros fallos.", 1, 1, 1, "2023-11-24", "2023-12-2", 1);
+      (1, 'Los usuarios experimentan problemas intermitentes de conexión a la red, lo que resulta en la imposibilidad de acceder a servicios en línea o compartir archivos de manera efectiva.', 'Problemas intermitentes de conexión afectan la accesibilidad a servicios en línea y la eficacia en la compartición de archivos. Se requiere diagnóstico exhaustivo, considerando enrutador, posibles interferencias y configuraciones de firewall.', 1, 1, 0, '2023-11-24 16:13:34', null, 1, 2),
+      (2, 'Se ha detectado un intento de acceso no autorizado a sistemas críticos de la empresa, lo que representa una amenaza potencial para la integridad y la confidencialidad de los datos.', 'Reporte de usuarios con errores al acceder a la base de datos, impactando aplicaciones dependientes. Se requiere revisión y corrección de consultas, asegurando la integridad de datos y optimizando el rendimiento.', 4, 3, 0, '2023-11-18 20:13:34', null, 1, 3),
+      (3, 'Los usuarios informan errores al intentar acceder o manipular datos en la base de datos, lo que afecta la funcionalidad de las aplicaciones que dependen de la información almacenada.', 'Usuarios reportan errores en acceso y manipulación de datos en la base, afectando aplicaciones dependientes. Se necesita revisar y corregir consultas para garantizar la integridad y optimizar el rendimiento.', 4, 2, 0, '2023-11-20 01:13:34', null, 1, 5),
+      (4, "Desafíos en el entrenamiento del modelo, resultando en baja precisión y rendimiento insatisfactorio.", "Optimizar el conjunto de datos, ajustar parámetros del modelo y aplicar técnicas avanzadas de entrenamiento para mejorar la calidad del modelo.", 3, 2, 1, "2023-11-24", "2023-12-3", 1, 5),
+      (5, "Fallo en la integración de sistemas, causando pérdida de datos y disrupciones en los servicios.", "Implementar un middleware robusto, mejorar la validación de datos y establecer monitoreo en tiempo real para prevenir futuros fallos.", 1, 1, 1, "2023-11-24", "2023-12-2", 1, 2);
 
   INSERT INTO `incident-reporting-system`.client__service
     VALUES
       (1, 2),
       (2, 5),
       (3, 3);
+      
+INSERT INTO `incident-reporting-system`.incident__type_problem
+	VALUES
+		(1, 3),
+        (2, 4),
+        (3, 6),
+        (4, 7),
+        (5, 4);
       
 -- SELECT * FROM `client`;
 -- SELECT * from client__service;

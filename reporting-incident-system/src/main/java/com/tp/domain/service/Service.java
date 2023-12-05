@@ -3,6 +3,7 @@ package com.tp.domain.service;
 import java.util.List;
 
 import com.tp.domain.client.Client;
+import com.tp.domain.incident.Incident;
 import com.tp.domain.type_problem.TypeProblem;
 
 import jakarta.persistence.CascadeType;
@@ -14,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.*;
 
@@ -46,4 +48,8 @@ public class Service {
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "service__type_problem", joinColumns = @JoinColumn(name = "fk_stp_service", nullable = false), inverseJoinColumns = @JoinColumn(name = "fk_stp_type_problem", nullable = false))
   private List<TypeProblem> typesProblem;
+
+  @OneToOne
+  @JoinColumn(name = "incident_service")
+  Incident incident;
 }

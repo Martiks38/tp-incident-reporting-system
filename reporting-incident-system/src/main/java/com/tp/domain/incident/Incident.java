@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.type.NumericBooleanConverter;
 
 import com.tp.domain.client.Client;
+import com.tp.domain.service.Service;
 import com.tp.domain.technical.Technical;
 import com.tp.domain.type_problem.TypeProblem;
 
@@ -20,6 +21,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -93,21 +95,25 @@ public class Incident {
 
   @Setter
   @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(name = "incident__type_problem", joinColumns = @JoinColumn(name = "fk_itp_problem", nullable = false), inverseJoinColumns = @JoinColumn(name = "fk_itp_incident", nullable = false))
+  @JoinTable(name = "incident__type_problem", joinColumns = @JoinColumn(name = "fk_itp_incident", nullable = false), inverseJoinColumns = @JoinColumn(name = "fk_itp_type_problem", nullable = false))
   private List<TypeProblem> incident_type_problem;
+
+  @Setter
+  @OneToOne(mappedBy = "incident", cascade = CascadeType.ALL)
+  Service incident_service;
 
   @Override
   public String toString() {
     return "Incident{" +
-            "incident_id=" + incident_id +
-            ", resolved=" + resolved +
-            ", description='" + description + '\'' +
-            ", considerations='" + considerations + '\'' +
-            ", create_time=" + create_time +
-            ", time_is_up=" + time_is_up +
-            ", state=" + state +
-            ", technical=" + technical +
-            ", client=" + client +
-            '}';
+        "incident_id=" + incident_id +
+        ", resolved=" + resolved +
+        ", description='" + description + '\'' +
+        ", considerations='" + considerations + '\'' +
+        ", create_time=" + create_time +
+        ", time_is_up=" + time_is_up +
+        ", state=" + state +
+        ", technical=" + technical +
+        ", client=" + client +
+        '}';
   }
 }
