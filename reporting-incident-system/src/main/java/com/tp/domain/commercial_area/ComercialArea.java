@@ -9,7 +9,7 @@ import jakarta.persistence.EntityManager;
 
 public class ComercialArea {
 
-  static void handlerClient(Client client, ActionClient action, Long id) {
+  public static void handlerClient(Client client, ActionClient action, Long id) {
     EntityManager manager = GetEntityManager.getManager();
 
     PersistenceClient conectionClient = new PersistenceClient(manager);
