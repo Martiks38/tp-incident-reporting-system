@@ -3,9 +3,15 @@ package com.tp.domain.specialty;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
+import java.util.List;
+
+import com.tp.domain.type_problem.TypeProblem;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
@@ -29,4 +35,8 @@ public class Specialty {
   @Setter
   @Column(nullable = false, length = 60)
   private String specialty_name;
+
+  @Setter
+  @ManyToMany(mappedBy = "specialties", cascade = CascadeType.ALL)
+  private List<TypeProblem> typesProblem;
 }
