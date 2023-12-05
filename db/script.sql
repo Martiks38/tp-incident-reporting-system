@@ -106,7 +106,7 @@
     `cuit` VARCHAR(11) NOT NULL,
     `business_name` VARCHAR(80) NOT NULL,
     `mail` VARCHAR(45) NOT NULL,
-	  state TINYINT NOT NULL,
+	state TINYINT NOT NULL,
     PRIMARY KEY (`id`));
 
 
@@ -120,6 +120,7 @@
     `type_problem_name` VARCHAR(45) NOT NULL,
     `maximum_resolution_time` BIGINT NOT NULL,
     `estimated_resolution_time` BIGINT NOT NULL,
+    complexity VARCHAR(10) NOT NULL,
     PRIMARY KEY (`id`));
 
 
@@ -298,14 +299,14 @@
 
   INSERT INTO `incident-reporting-system`.type_problem
     VALUES
-    (1, 'access problems', 7200000, 1080000),
-    (2, 'software errors', 43200000, 28800000),
-    (3, 'connectivity problem', 8640000, 5400000),
-    (4, 'security issues', 100800000, 57600000),
-    (5, 'updates and patches', 50400000, 21600000),
-    (6, 'database errors', 108000000, 86400000),
-    (7, 'integration problems', 144000000, 108000000),
-    (8, 'performance problems', 61200000, 32400000);
+    (1, 'access problems', 7200000, 1080000, "simple"),
+    (2, 'software errors', 43200000, 28800000, "complejo"),
+    (3, 'connectivity problem', 8640000, 5400000, "simple"),
+    (4, 'security issues', 100800000, 57600000, "complejo"),
+    (5, 'updates and patches', 50400000, 21600000, "complejo"),
+    (6, 'database errors', 108000000, 86400000, "complejo"),
+    (7, 'integration problems', 144000000, 108000000, "simple"),
+    (8, 'performance problems', 61200000, 32400000, "simple");
 
   INSERT INTO `incident-reporting-system`.service__type_problem
     VALUES
@@ -341,7 +342,9 @@
     VALUES
       (1, 'Los usuarios experimentan problemas intermitentes de conexión a la red, lo que resulta en la imposibilidad de acceder a servicios en línea o compartir archivos de manera efectiva.', 'Problemas intermitentes de conexión afectan la accesibilidad a servicios en línea y la eficacia en la compartición de archivos. Se requiere diagnóstico exhaustivo, considerando enrutador, posibles interferencias y configuraciones de firewall.', 1, 1, 0, '2023-11-24 16:13:34', null, 1),
       (2, 'Se ha detectado un intento de acceso no autorizado a sistemas críticos de la empresa, lo que representa una amenaza potencial para la integridad y la confidencialidad de los datos.', 'Reporte de usuarios con errores al acceder a la base de datos, impactando aplicaciones dependientes. Se requiere revisión y corrección de consultas, asegurando la integridad de datos y optimizando el rendimiento.', 4, 3, 0, '2023-11-18 20:13:34', null, 1),
-      (3, 'Los usuarios informan errores al intentar acceder o manipular datos en la base de datos, lo que afecta la funcionalidad de las aplicaciones que dependen de la información almacenada.', 'Usuarios reportan errores en acceso y manipulación de datos en la base, afectando aplicaciones dependientes. Se necesita revisar y corregir consultas para garantizar la integridad y optimizar el rendimiento.', 4, 2, 0, '2023-11-20 01:13:34', null, 1);
+      (3, 'Los usuarios informan errores al intentar acceder o manipular datos en la base de datos, lo que afecta la funcionalidad de las aplicaciones que dependen de la información almacenada.', 'Usuarios reportan errores en acceso y manipulación de datos en la base, afectando aplicaciones dependientes. Se necesita revisar y corregir consultas para garantizar la integridad y optimizar el rendimiento.', 4, 2, 0, '2023-11-20 01:13:34', null, 1),
+      (4, "Desafíos en el entrenamiento del modelo, resultando en baja precisión y rendimiento insatisfactorio.", "Optimizar el conjunto de datos, ajustar parámetros del modelo y aplicar técnicas avanzadas de entrenamiento para mejorar la calidad del modelo.", 3, 2, 1, "2023-11-24", "2023-12-3", 1),
+      (5, "Fallo en la integración de sistemas, causando pérdida de datos y disrupciones en los servicios.", "Implementar un middleware robusto, mejorar la validación de datos y establecer monitoreo en tiempo real para prevenir futuros fallos.", 1, 1, 1, "2023-11-24", "2023-12-2", 1);
 
   INSERT INTO `incident-reporting-system`.client__service
     VALUES
@@ -349,4 +352,14 @@
       (2, 5),
       (3, 3);
       
-SELECT * FROM `client`;
+-- SELECT * FROM `client`;
+-- SELECT * from client__service;
+-- SELECT * FROM service;
+-- SELECT * FROM technical;
+-- SELECT * FROM specialty;
+-- SELECT * FROM incident;
+-- SELECT * FROM type_problem;
+-- SELECT * FROM technical__specialty;
+-- SELECT * FROM type_problem__specialty;
+-- SELECT * FROM service__type_problem;
+    
