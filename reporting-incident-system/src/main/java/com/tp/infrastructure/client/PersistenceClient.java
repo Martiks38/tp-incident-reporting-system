@@ -105,7 +105,9 @@ public class PersistenceClient implements ClientDAO {
 
       Client c = manager.find(Client.class, id);
 
-      manager.remove(c);
+      c.setState(false);
+
+      manager.merge(c);
 
       transaction.commit();
     } catch (Exception e) {

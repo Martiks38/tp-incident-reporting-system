@@ -83,7 +83,9 @@ public class PersistenceIncident implements IncidentDAO {
 
       Incident incident = manager.find(Incident.class, id);
 
-      manager.remove(incident);
+      incident.setState(false);
+
+      manager.merge(incident);
 
       transaction.commit();
     } catch (Exception e) {

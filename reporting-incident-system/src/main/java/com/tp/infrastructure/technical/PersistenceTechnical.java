@@ -103,9 +103,11 @@ public class PersistenceTechnical implements TechnicalDAO {
     try {
       transaction.begin();
 
-      Technical t = manager.find(Technical.class, id);
+      Technical technical = manager.find(Technical.class, id);
 
-      manager.remove(t);
+      technical.setState(false);
+
+      manager.remove(technical);
 
       transaction.commit();
     } catch (Exception e) {
