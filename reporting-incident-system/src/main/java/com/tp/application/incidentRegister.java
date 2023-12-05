@@ -11,13 +11,11 @@ import com.tp.infrastructure.type_problem.PersistenceTypeProblem;
 import jakarta.persistence.EntityManager;
 
 import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class incidentRegister {
+public class IncidentRegister {
 
     private EntityManager manager;
 
@@ -25,14 +23,15 @@ public class incidentRegister {
     private PersistenceClient persistenceClient;
     private PersistenceTechnical persistenceTechnical;
 
-    public incidentRegister(){
+    public IncidentRegister() {
         this.manager = GetEntityManager.getManager();
         this.persistenceIncident = new PersistenceIncident(manager);
         this.persistenceClient = new PersistenceClient(manager);
         this.persistenceTechnical = new PersistenceTechnical(manager);
     }
 
-    public Incident nuevo(Long idClient,Long idTecnico, String descripcion, String consideraciones, List<TypeProblem> tiposDeProblemas){
+    public Incident nuevo(Long idClient, Long idTecnico, String descripcion, String consideraciones,
+            List<TypeProblem> tiposDeProblemas) {
         Client cliente = persistenceClient.findById(idClient);
         Technical tecnico = persistenceTechnical.findById(idTecnico);
         Incident incidente = new Incident();
@@ -49,19 +48,15 @@ public class incidentRegister {
         incidente.setResolved(false);
         persistenceIncident.save(incidente);
 
-
         return incidente;
     }
 
-    public void agregarIncidente(){
+    public void agregarIncidente() {
         List<TypeProblem> listaProblemas = new ArrayList<>();
         List<TypeProblem> listaProblemas2 = new ArrayList<>();
 
         PersistenceTypeProblem TiposProblemas = new PersistenceTypeProblem(manager);
         listaProblemas = TiposProblemas.findAll();
-//             TypeProblem problema1 = new TypeProblem();
-//             TypeProblem problema2 = new TypeProblem();
-
 
         listaProblemas2.add(listaProblemas.get(1));
         listaProblemas2.add(listaProblemas.get(2));
@@ -74,11 +69,10 @@ public class incidentRegister {
         Client cliente = clienteRepo.findById(1L);
 
         PersistenceIncident pi = new PersistenceIncident(manager);
-        Incident primerIncidente = new Incident(false,"Problema de conexion","No conecto el modem",sqlDate,null,true,tecnico,cliente,listaProblemas2);
+        Incident primerIncidente = new Incident(false, "Problema de conexion", "No conecto el modem", sqlDate, null,
+                true, tecnico, cliente, listaProblemas2);
         pi.save(primerIncidente);
-        System.out.println(primerIncidente+"\n se ingreso correctamente");
+        System.out.println(primerIncidente + "\n se ingreso correctamente");
     }
-
-
 
 }

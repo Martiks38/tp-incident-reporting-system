@@ -1,27 +1,22 @@
 package com.tp;
 
 import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import com.tp.application.Notification;
-import com.tp.application.incidentRegister;
 import com.tp.application.notificationEmail;
 import com.tp.domain.client.Client;
 import com.tp.domain.incident.Incident;
 import com.tp.domain.notificationMedium.NotificationMedium;
 import com.tp.domain.rrhh.Rrhh;
-import com.tp.domain.service.Service;
 
 import com.tp.domain.technical.Technical;
 import com.tp.domain.type_problem.TypeProblem;
 import com.tp.infrastructure.client.PersistenceClient;
 import com.tp.infrastructure.incident.PersistenceIncident;
-import com.tp.infrastructure.notificationMedium.PersistenceNotificationMedium;
 import com.tp.infrastructure.technical.PersistenceTechnical;
 import com.tp.infrastructure.type_problem.PersistenceTypeProblem;
 import jakarta.persistence.EntityManager;
@@ -31,17 +26,65 @@ import jakarta.persistence.Persistence;
 
 public class Main {
     public static void main(String[] args) {
-//        final int days = 7;
-//        final String specialty_name = "training";
 
-        // Rrhh.generateReport();
-        // Rrhh.technicianWithFasterIncidentResolution();
-        // Rrhh.technicianWithMostIncidentsForNDays(days);
-//        Rrhh.technicianWithMostIncidentsForNDaysBySpecialty(days, specialty_name);
-        TestFunciones();
+        Scanner scanner = new Scanner(System.in);
+
+        int opcion;
+
+        final int days = 7;
+        final String specialty_name1 = "training";
+        final String specialty_name2 = "software";
+
+        do {
+            // Mostrar el menú
+            System.out.println("Menú:");
+            System.out.println("1. Emitir reporte con los incidentes asignados a cada técnico.");
+            System.out.println("2. Emitir reporte del técnico con mayor velocidad al resolve un incidente.");
+            System.out.println("3. Emitir reporte del técnico con más incidentes resueltos hace N días.");
+            System.out.println(
+                    "4. Emitir reporte del técnico con más incidentes resueltos hace N días según una especialidad.");
+            System.out.println("5. Crear incidente.");
+            System.out.println("6. Salir");
+
+            System.out.print("Elige una opción (1-6): ");
+            opcion = scanner.nextInt();
+
+            System.out.println();
+            switch (opcion) {
+                case 1:
+                    Rrhh.generateReport();
+                    break;
+                case 2:
+                    Rrhh.technicianWithFasterIncidentResolution();
+                    break;
+                case 3:
+                    Rrhh.technicianWithMostIncidentsForNDays(days);
+                    break;
+                case 4:
+                    Rrhh.technicianWithMostIncidentsForNDaysBySpecialty(days, specialty_name1);
+
+                    System.out.println();
+
+                    Rrhh.technicianWithMostIncidentsForNDaysBySpecialty(days, specialty_name2);
+                    break;
+                case 5:
+                    CreateIncident();
+                    break;
+                case 6:
+                    System.out.println("Cerrando incident reporting system.");
+                    break;
+                default:
+                    System.out.println("Opción no válida. Inténtalo de nuevo.");
+            }
+
+            System.out.println();
+        } while (opcion != 6);
+
+        scanner.close();
+
     }
 
-    public static void TestFunciones() {
+    public static void CreateIncident() {
         final String persistenceUnitName = "test-bd";
 
         EntityManagerFactory factory = Persistence.createEntityManagerFactory(persistenceUnitName);
@@ -51,25 +94,11 @@ public class Main {
         EntityTransaction tx = manager.getTransaction();
 
         try {
-//             tx.begin();
-            System.out.println(Date.from(Instant.now()));
-
-//            Service s = manager.createQuery("FROM Service", Service.class).getResultList().get(0);
-//            List<Service> services = new ArrayList<Service>();
-
-//            services.add(s);
-
-//             Client c = new Client("23142356312", "Maraviglioso Games S.A.",
-//             "contact@gmailmaravigliosogames.com", true, new ArrayList<>(), services);
-
-             List<TypeProblem> listaProblemas = new ArrayList<>();
-             List<TypeProblem> listaProblemas2 = new ArrayList<>();
+            List<TypeProblem> listaProblemas = new ArrayList<>();
+            List<TypeProblem> listaProblemas2 = new ArrayList<>();
 
             PersistenceTypeProblem TiposProblemas = new PersistenceTypeProblem(manager);
             listaProblemas = TiposProblemas.findAll();
-//             TypeProblem problema1 = new TypeProblem();
-//             TypeProblem problema2 = new TypeProblem();
-
 
             listaProblemas2.add(listaProblemas.get(1));
             listaProblemas2.add(listaProblemas.get(2));
@@ -82,62 +111,23 @@ public class Main {
             Client cliente = clienteRepo.findById(1L);
 
             PersistenceIncident pi = new PersistenceIncident(manager);
-            Incident primerIncidente = new Incident(false,"Problema de conexion","No conecto el modem",sqlDate,null,true,tecnico,cliente,listaProblemas2);
+            Incident primerIncidente = new Incident(false, "Problema de conexion", "No conecto el modem", sqlDate, null,
+                    true, tecnico, cliente, listaProblemas2);
             pi.save(primerIncidente);
-            System.out.println(primerIncidente+"\n se ingreso correctamente");
+            System.out.println(primerIncidente + "\n se ingreso correctamente");
 
             NotificationMedium nm = tecnico.getMedium();
             Notification notification = new Notification();
-            if (nm.getMedium().equals("Email")){
+
+            if (nm.getMedium().equals("Email")) {
                 notification.setStrategy(new notificationEmail());
             }
+
             if (nm.getMedium().equals("WhatsApp")) {
                 notification.setStrategy(new notificationEmail());
             }
-            notification.executeStrategy("Se inicio un nuevo incidente"+ primerIncidente);
 
-            Scanner scanner = new Scanner(System.in);
-
-//            PersistenceNotificationMedium perNoti = new PersistenceNotificationMedium(manager);
-//            tecnico.setPreferredNotificationMethod(perNoti.findByName("WhatsApp").getMedium());
-//            tecnicoRepo.update(tecnico);
-
-
-
-//            incidentRegister incidentRegister = new incidentRegister();
-//            Incident primerIncidente = incidentRegister.nuevo(1L,1L,"Problema de conexion","No conecto el modem",listaProblemas2);
-
-//            today.plusDays(1);
-//            Date sqlDate2 = Date.valueOf("2023-12-05");
-
-//            primerIncidente = pi.findById(4L);
-
-//            primerIncidente.setResolved(true);
-//            primerIncidente.setTime_is_up(sqlDate2);
-//            pi.update(primerIncidente);
-//            System.out.println(primerIncidente+"\n se actualizo correctamente");
-
-            
-
-
-//            System.out.println(primerIncidente.getIncident_id());
-            // manager.persist(c);
-//             tx.commit();
-
-//            List<Client> clients = (List<Client>) manager.createQuery("FROM Client", Client.class).getResultList();
-//
-//            clients.stream().forEach(client -> System.out.println(client.getBusiness_name()));
-
-//            Client cliente = manager.find(Client.class, 4);
-//
-//            tx.begin();
-//
-//            cliente.setClient_services(services);
-//
-//            manager.merge(cliente);
-//
-//            tx.commit();
-
+            notification.executeStrategy("Se inicio un nuevo incidente" + primerIncidente);
         } catch (Exception e) {
             if (tx != null && tx.isActive()) {
                 tx.rollback();

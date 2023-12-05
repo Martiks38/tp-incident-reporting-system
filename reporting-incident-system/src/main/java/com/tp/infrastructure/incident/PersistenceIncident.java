@@ -34,16 +34,16 @@ public class PersistenceIncident implements IncidentDAO {
     try {
       transaction.begin();
 
-//      IncidentCheckData.check(data);
+      IncidentCheckData.check(data);
 
       manager.persist(data);
 
       transaction.commit();
 
     } catch (Exception e) {
-//      if (transaction != null && transaction.isActive()) {
-//        transaction.rollback();
-//      }
+      if (transaction != null && transaction.isActive()) {
+        transaction.rollback();
+      }
 
       // Para ver la traza pero se debería borrar y enviar la traza a un archivo o una
       // base de datos que almacene los errores
