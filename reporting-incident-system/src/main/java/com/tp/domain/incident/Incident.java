@@ -95,4 +95,19 @@ public class Incident {
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "incident__type_problem", joinColumns = @JoinColumn(name = "fk_itp_problem", nullable = false), inverseJoinColumns = @JoinColumn(name = "fk_itp_incident", nullable = false))
   private List<TypeProblem> incident_type_problem;
+
+  @Override
+  public String toString() {
+    return "Incident{" +
+            "incident_id=" + incident_id +
+            ", resolved=" + resolved +
+            ", description='" + description + '\'' +
+            ", considerations='" + considerations + '\'' +
+            ", create_time=" + create_time +
+            ", time_is_up=" + time_is_up +
+            ", state=" + state +
+            ", technical=" + technical +
+            ", client=" + client +
+            '}';
+  }
 }

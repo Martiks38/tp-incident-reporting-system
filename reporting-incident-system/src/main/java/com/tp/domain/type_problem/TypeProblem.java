@@ -37,6 +37,8 @@ public class TypeProblem {
     this.specialties = specialties;
   }
 
+
+
   @Setter
   @Column(nullable = false, length = 45)
   private String type_problem_name;
