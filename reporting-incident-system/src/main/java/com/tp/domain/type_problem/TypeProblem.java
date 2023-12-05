@@ -37,8 +37,6 @@ public class TypeProblem {
     this.specialties = specialties;
   }
 
-
-
   @Setter
   @Column(nullable = false, length = 45)
   private String type_problem_name;
@@ -50,6 +48,10 @@ public class TypeProblem {
   @Setter
   @Column(nullable = false)
   private Long estimated_resolution_time;
+
+  @Setter
+  @Column(nullable = false)
+  private String complexity;
 
   @Setter
   @ManyToMany(cascade = CascadeType.ALL)
