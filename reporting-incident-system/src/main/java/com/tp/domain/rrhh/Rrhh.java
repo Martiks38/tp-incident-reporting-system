@@ -23,28 +23,6 @@ import jakarta.persistence.EntityManager;
 
 public class Rrhh {
 
-  public static void technicianWithFasterIncidentResolution() {
-    EntityManager manager = GetEntityManager.getManager();
-
-    PersistenceTechnical conectionTechnical = new PersistenceTechnical(manager);
-
-    List<Technical> technicals = conectionTechnical.findAll();
-
-    Optional<Technical> technicianWithTheShortestTime = technicals.stream()
-        .filter(t -> t.getIncident_resolution_speed() != null)
-        .collect(Collectors.minBy(Comparator.comparing(Technical::getIncident_resolution_speed)));
-
-    if (technicianWithTheShortestTime.isPresent()) {
-      Technical technical = technicianWithTheShortestTime.get();
-
-      System.out.println("\nEl técnico que más rápido resolvió los incidentes es: " +
-          technical.getTechnical_name());
-    } else {
-      System.out.println("\nNo se encontro ningún técnico que haya resuelto incidentes.");
-    }
-
-  }
-
   public static void generateReport() {
     EntityManager manager = GetEntityManager.getManager();
 
@@ -84,6 +62,28 @@ public class Rrhh {
         System.out.print("Estado: " + incidentState + "\n\n");
       });
     });
+  }
+
+  public static void technicianWithFasterIncidentResolution() {
+    EntityManager manager = GetEntityManager.getManager();
+
+    PersistenceTechnical conectionTechnical = new PersistenceTechnical(manager);
+
+    List<Technical> technicals = conectionTechnical.findAll();
+
+    Optional<Technical> technicianWithTheShortestTime = technicals.stream()
+        .filter(t -> t.getIncident_resolution_speed() != null)
+        .collect(Collectors.minBy(Comparator.comparing(Technical::getIncident_resolution_speed)));
+
+    if (technicianWithTheShortestTime.isPresent()) {
+      Technical technical = technicianWithTheShortestTime.get();
+
+      System.out.println("\nEl técnico que más rápido resolvió los incidentes es: " +
+          technical.getTechnical_name());
+    } else {
+      System.out.println("\nNo se encontro ningún técnico que haya resuelto incidentes.");
+    }
+
   }
 
   public static void technicianWithMostIncidentsForNDays(int days) {
