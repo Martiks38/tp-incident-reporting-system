@@ -3,7 +3,6 @@ package com.tp.domain.client;
 import java.util.List;
 import java.util.Objects;
 
-import lombok.ToString;
 import org.hibernate.type.NumericBooleanConverter;
 
 import com.tp.domain.incident.Incident;
@@ -24,7 +23,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 @Getter
 @NoArgsConstructor
@@ -90,11 +88,11 @@ public class Client {
   @Override
   public String toString() {
     return "Client{" +
-            "client_id=" + client_id +
-            ", cuit='" + cuit + '\'' +
-            ", business_name='" + business_name + '\'' +
-            ", mail='" + mail + '\'' +
-            ", state=" + state +
-            '}';
+        "client_id=" + client_id +
+        ", cuit='" + cuit + '\'' +
+        ", business_name='" + business_name + '\'' +
+        ", mail='" + mail + '\'' +
+        ", state=" + state +
+        '}';
   }
 }
