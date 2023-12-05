@@ -28,7 +28,10 @@ public class Rrhh {
 
     PersistenceTechnical conectionTechnical = new PersistenceTechnical(manager);
 
-    List<Technical> technicals = conectionTechnical.findAll();
+    List<Technical> technicals = conectionTechnical.findAll()
+        .stream()
+        .filter(t -> t.getState())
+        .collect(Collectors.toList());
 
     System.out.print("\n\n\n");
 
@@ -39,7 +42,10 @@ public class Rrhh {
 
     technicals.forEach(technical -> {
       String technical_name = technical.getTechnical_name();
-      List<Incident> incidents = technical.getIncidents();
+      List<Incident> incidents = technical.getIncidents()
+          .stream()
+          .filter(i -> i.getState())
+          .collect(Collectors.toList());
 
       System.out.print("Técnico: " + technical_name + "\n");
       System.out.print("Incidentes\n");
@@ -71,8 +77,9 @@ public class Rrhh {
 
     List<Technical> technicals = conectionTechnical.findAll();
 
-    Optional<Technical> technicianWithTheShortestTime = technicals.stream()
-        .filter(t -> t.getIncident_resolution_speed() != null)
+    Optional<Technical> technicianWithTheShortestTime = technicals
+        .stream()
+        .filter(t -> t.getState() && t.getIncident_resolution_speed() != null)
         .collect(Collectors.minBy(Comparator.comparing(Technical::getIncident_resolution_speed)));
 
     if (technicianWithTheShortestTime.isPresent()) {
@@ -89,7 +96,10 @@ public class Rrhh {
   public static void technicianWithMostIncidentsForNDays(int days) {
     EntityManager manager = GetEntityManager.getManager();
 
-    List<Incident> incidents = new PersistenceIncident(manager).findAll();
+    List<Incident> incidents = new PersistenceIncident(manager).findAll()
+        .stream()
+        .filter(i -> i.getState())
+        .collect(Collectors.toList());
 
     if (incidents.size() == 0) {
       System.out.print("No se encontraron incidentes.");
@@ -126,7 +136,10 @@ public class Rrhh {
   public static void technicianWithMostIncidentsForNDaysBySpecialty(int days, String specialty_name) {
     EntityManager manager = GetEntityManager.getManager();
 
-    List<Incident> incidents = new PersistenceIncident(manager).findAll();
+    List<Incident> incidents = new PersistenceIncident(manager).findAll()
+        .stream()
+        .filter(i -> i.getState())
+        .collect(Collectors.toList());
 
     if (incidents.size() == 0) {
       System.out.print("No se encontraron incidentes.");
