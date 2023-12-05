@@ -12,6 +12,7 @@ import com.tp.application.notificationEmail;
 import com.tp.domain.client.Client;
 import com.tp.domain.incident.Incident;
 import com.tp.domain.notificationMedium.NotificationMedium;
+import com.tp.domain.operator.Operator;
 import com.tp.domain.rrhh.Rrhh;
 
 import com.tp.domain.technical.Technical;
@@ -66,7 +67,7 @@ public class Main {
                     Rrhh.technicianWithMostIncidentsForNDaysBySpecialty(days, specialty_name2);
                     break;
                 case 5:
-                    CreateIncident();
+                    Operator.assistCustomer();
                     break;
                 case 6:
                     System.out.println("Cerrando incident reporting system.");
