@@ -6,10 +6,14 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
+import com.tp.application.Notification;
 import com.tp.application.incidentRegister;
+import com.tp.application.notificationEmail;
 import com.tp.domain.client.Client;
 import com.tp.domain.incident.Incident;
+import com.tp.domain.notificationMedium.NotificationMedium;
 import com.tp.domain.rrhh.Rrhh;
 import com.tp.domain.service.Service;
 
@@ -17,6 +21,7 @@ import com.tp.domain.technical.Technical;
 import com.tp.domain.type_problem.TypeProblem;
 import com.tp.infrastructure.client.PersistenceClient;
 import com.tp.infrastructure.incident.PersistenceIncident;
+import com.tp.infrastructure.notificationMedium.PersistenceNotificationMedium;
 import com.tp.infrastructure.technical.PersistenceTechnical;
 import com.tp.infrastructure.type_problem.PersistenceTypeProblem;
 import jakarta.persistence.EntityManager;
@@ -26,13 +31,14 @@ import jakarta.persistence.Persistence;
 
 public class Main {
     public static void main(String[] args) {
-        final int days = 7;
-        final String specialty_name = "training";
+//        final int days = 7;
+//        final String specialty_name = "training";
 
         // Rrhh.generateReport();
         // Rrhh.technicianWithFasterIncidentResolution();
         // Rrhh.technicianWithMostIncidentsForNDays(days);
-        Rrhh.technicianWithMostIncidentsForNDaysBySpecialty(days, specialty_name);
+//        Rrhh.technicianWithMostIncidentsForNDaysBySpecialty(days, specialty_name);
+        TestFunciones();
     }
 
     public static void TestFunciones() {
@@ -67,31 +73,49 @@ public class Main {
 
             listaProblemas2.add(listaProblemas.get(1));
             listaProblemas2.add(listaProblemas.get(2));
-//
-//            incidentRegister incidentRegister = new incidentRegister();
-//            incidentRegister.nuevo(1L,"Problema de conexion","No conecto el modem",listaProblemas2);
+
             LocalDate today = LocalDate.now();
             Date sqlDate = Date.valueOf(today);
             PersistenceTechnical tecnicoRepo = new PersistenceTechnical(manager);
             Technical tecnico = tecnicoRepo.findById(1L);
             PersistenceClient clienteRepo = new PersistenceClient(manager);
             Client cliente = clienteRepo.findById(1L);
-//            PersistenceTypeProblem problemas = new PersistenceTypeProblem(manager);
-//            List<TypeProblem> problemList
-            Incident primerIncidente = new Incident(false,"example","niguna",sqlDate,null,true,tecnico,cliente,listaProblemas2);
+
             PersistenceIncident pi = new PersistenceIncident(manager);
+            Incident primerIncidente = new Incident(false,"Problema de conexion","No conecto el modem",sqlDate,null,true,tecnico,cliente,listaProblemas2);
             pi.save(primerIncidente);
             System.out.println(primerIncidente+"\n se ingreso correctamente");
 
-            today.plusDays(1);
-            Date sqlDate2 = Date.valueOf("2023-12-05");
+            NotificationMedium nm = tecnico.getMedium();
+            Notification notification = new Notification();
+            if (nm.getMedium().equals("Email")){
+                notification.setStrategy(new notificationEmail());
+            }
+            if (nm.getMedium().equals("WhatsApp")) {
+                notification.setStrategy(new notificationEmail());
+            }
+            notification.executeStrategy("Se inicio un nuevo incidente"+ primerIncidente);
 
-            primerIncidente = pi.findById(4L);
+            Scanner scanner = new Scanner(System.in);
 
-            primerIncidente.setResolved(true);
-            primerIncidente.setTime_is_up(sqlDate2);
-            pi.update(primerIncidente);
-            System.out.println(primerIncidente+"\n se actualizo correctamente");
+//            PersistenceNotificationMedium perNoti = new PersistenceNotificationMedium(manager);
+//            tecnico.setPreferredNotificationMethod(perNoti.findByName("WhatsApp").getMedium());
+//            tecnicoRepo.update(tecnico);
+
+
+
+//            incidentRegister incidentRegister = new incidentRegister();
+//            Incident primerIncidente = incidentRegister.nuevo(1L,1L,"Problema de conexion","No conecto el modem",listaProblemas2);
+
+//            today.plusDays(1);
+//            Date sqlDate2 = Date.valueOf("2023-12-05");
+
+//            primerIncidente = pi.findById(4L);
+
+//            primerIncidente.setResolved(true);
+//            primerIncidente.setTime_is_up(sqlDate2);
+//            pi.update(primerIncidente);
+//            System.out.println(primerIncidente+"\n se actualizo correctamente");
 
             
 
