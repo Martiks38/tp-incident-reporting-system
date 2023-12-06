@@ -2,7 +2,7 @@ package com.tp.domain.notify;
 
 public class WhatsappDecorator extends NotifyDecorator {
 
-  WhatsappDecorator(Notify medium) {
+  public WhatsappDecorator(Notify medium) {
     super(medium);
   }
 
