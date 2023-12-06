@@ -2,13 +2,16 @@ package com.tp.domain.operator;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.tp.application.GetEntityManager;
 import com.tp.assets.ActionClient;
+import com.tp.assets.Constant;
 import com.tp.domain.client.Client;
 import com.tp.domain.commercial_area.ComercialArea;
 import com.tp.domain.incident.Incident;
@@ -27,6 +30,7 @@ import jakarta.persistence.EntityManager;
 public class Operator {
   static final Scanner scanner = new Scanner(System.in);
   static final EntityManager manager = GetEntityManager.getManager();
+  static final ZoneId GMTTimeZone = Constant.GMT_TIME_ZONE;
 
   public static void assistCustomer() {
     PersistenceClient persistenceClient = new PersistenceClient(manager);
@@ -273,6 +277,7 @@ public class Operator {
   private static void createIncident(Incident incident, PersistenceIncident persistenceIncident) {
     List<Technical> technicals = new PersistenceTechnical(manager).findAll();
     List<Technical> possibleTechnicians = new ArrayList<>();
+    List<TypeProblem> typeProblems = incident.getIncident_type_problem();
 
     persistenceIncident.save(incident);
 
@@ -281,7 +286,124 @@ public class Operator {
         .filter(t -> {
           List<Specialty> specialties = t.getSpecialties();
 
+          List<TypeProblem> canSolve = specialties
+              .stream()
+              .map(Specialty::getTypesProblem)
+              .flatMap(List::stream)
+              .distinct()
+              .collect(Collectors.toList());
+
+          return canSolve.containsAll(typeProblems);
         }).collect(Collectors.toList());
+
+    System.out.print("Mensaje al operador.");
+    System.out.print("Los posibles técnicos que pueden resolver el problema son: \n\n");
+
+    possibleTechnicians.forEach(Technical::getTechnical_name);
+
+    /*
+     * TODO
+     * 
+     * Añadir elección de técnico [X]
+     * luego del do while actualizar incident creado
+     * El operador debe establecer la fecha de solución (opcional para el si agrega
+     * más tiempo o toma el valor por defecto)
+     * Informar al cliente de la posible fecha de solución
+     * Notificar al técnico de del incidente
+     * 
+     * Añadir en el main un método de technical q tome un incidente y lo resuelva
+     * 
+     * Con esto estaría terminado al hacer si el cliente tiene servicios
+     * 
+     */
+
+    boolean isInvalidOption = true;
+    int amountPossibleTechnician = possibleTechnicians.size();
+    int option = -1;
+
+    do {
+      System.out.print("Elija uno de ellos (1-" + amountPossibleTechnician + "): ");
+
+      option = scanner.nextInt();
+
+      isInvalidOption = !(option > 0 && option <= amountPossibleTechnician);
+
+      if (isInvalidOption) {
+        System.out.print("Opción inválida.\n\n");
+      } else {
+        Technical selectedTechnical = possibleTechnicians.get(option - 1);
+
+        incident.setTechnical(selectedTechnical);
+
+        persistenceIncident.save(incident);
+      }
+
+    } while (isInvalidOption);
+
+    Long minAverageTimeByResolveInDays = typeProblems.stream()
+        .min(Comparator.comparingLong(TypeProblem::getEstimated_resolution_time))
+        .map(TypeProblem::getEstimated_resolution_time)
+        .orElse(null);
+
+    Long maxResolutionTimeInDays = typeProblems.stream()
+        .max(Comparator.comparing(TypeProblem::getMaximum_resolution_time))
+        .map(TypeProblem::getMaximum_resolution_time)
+        .orElse(null);
+
+    LocalDate miniumResolutionDay = LocalDate.now()
+        .atStartOfDay(GMTTimeZone)
+        .plusDays(minAverageTimeByResolveInDays)
+        .toLocalDate();
+
+    LocalDate maxResolutionDay = LocalDate.now()
+        .atStartOfDay(GMTTimeZone)
+        .plusDays(maxResolutionTimeInDays)
+        .toLocalDate();
+
+    LocalDate estimatedDateForSolution = miniumResolutionDay;
+
+    System.out
+        .print("Se espera que el incidente se resuelva para el " +
+            miniumResolutionDay + ". Y, en caso de complicación el problema se resolverá como máximo para el "
+            + maxResolutionDay + ".\n");
+
+    System.out.println("¿Desea modificar el mínimo de tiempo para realizar la tarea? (y/n)");
+
+    String optionModify = scanner.nextLine().toLowerCase();
+
+    if (optionModify.equals("y")) {
+      Long additionalTime = maxResolutionTimeInDays - minAverageTimeByResolveInDays;
+
+      Long selectedAdditionalTime = -1L;
+      boolean incorrectSelectedAdditionalTime = true;
+
+      do {
+        System.out.println("Puede añadir hasta " + additionalTime
+            + "días para informar al cliente que estará resuleto su problema.\n¿Cuántos desea añadir? ");
+
+        selectedAdditionalTime = scanner.nextLong();
+
+        incorrectSelectedAdditionalTime = selectedAdditionalTime >= 0 && selectedAdditionalTime < additionalTime;
+
+        if (incorrectSelectedAdditionalTime) {
+          System.out.print("No es un tiempo válido.\n");
+        } else {
+          estimatedDateForSolution = miniumResolutionDay.plusDays(selectedAdditionalTime);
+        }
+
+      } while (selectedAdditionalTime < 0 || selectedAdditionalTime > additionalTime);
+    }
+
+    /*
+     * TODO
+     * 
+     * Aplicar método de notificación a correo del cliente
+     * 
+     */
+    System.out.print("Mensaje para el client.");
+    System.out.println("Su incidente ya ha sido ingresado. Se estima que su problema estará solucionado para el día"
+        + estimatedDateForSolution);
+    System.out.print("Muchas gracias por elegirnos.");
 
   }
 }
