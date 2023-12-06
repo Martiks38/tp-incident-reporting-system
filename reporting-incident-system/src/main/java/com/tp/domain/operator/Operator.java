@@ -69,48 +69,67 @@ public class Operator {
 
       handlerServiceClient(customer, newIncident);
 
-      handlerTypesProblem(newIncident);
-
-      handlerDescription(newIncident);
-
-      Service incidentService = newIncident.getIncident_service();
-      List<TypeProblem> typesProblemOfIncidentService = incidentService.getTypesProblem();
-
-      while (typesProblemOfIncidentService.containsAll(newIncident.getIncident_type_problem())) {
-
-        System.out.println(
-            "Los tipos de problemas asociados al incidente reportado no coinciden con el servicio adjuntado.\n");
-
-        handlerTypesProblem(newIncident);
-
-        incidentService = newIncident.getIncident_service();
-        typesProblemOfIncidentService = incidentService.getTypesProblem();
-      }
-
-      GenerateIncident.issueIncident(newIncident);
-
-      ReportIncident.reportNewIncident(newIncident);
-
     } else {
-      /*
-       * TODO
-       * 
-       * Terminar esta sección
-       * 
-       */
+
+      System.out.print("Mensaje para el operador.");
       System.out.print("El cliente tiene contratado los siguientes servicios:\n\n");
 
-      customer.getClient_services().forEach(service -> {
+      List<Service> clientServices = customer.getClient_services();
+      int amountClientServices = clientServices.size();
+
+      clientServices.forEach(service -> {
         System.out.print(service.getService_name() + "\n");
       });
+
+      boolean isInvalidOption = true;
+      int optionService = -1;
+
+      System.out.print("Mensaje para el cliente.");
+
+      do {
+        System.out
+            .print("Por favor elija con cuál servicio desea reportar el incidente. (1-" + amountClientServices + ")");
+
+        customer.getClient_services().forEach(service -> {
+          System.out.print(" -\t" + service.getService_name() + "\n");
+        });
+
+        optionService = scanner.nextInt();
+
+        isInvalidOption = !(optionService > 0 && optionService <= amountClientServices);
+
+        if (isInvalidOption) {
+          System.out.print("No es una opción válida.\n");
+        } else {
+          Service selectedService = clientServices.get(optionService - 1);
+
+          newIncident.setIncident_service(selectedService);
+        }
+      } while (isInvalidOption);
+
     }
 
-    /**
-     * TODO
-     * 
-     * El cliente debe elegir un servicio para continuar
-     * 
-     */
+    handlerTypesProblem(newIncident);
+
+    handlerDescription(newIncident);
+
+    Service incidentService = newIncident.getIncident_service();
+    List<TypeProblem> typesProblemOfIncidentService = incidentService.getTypesProblem();
+
+    while (typesProblemOfIncidentService.containsAll(newIncident.getIncident_type_problem())) {
+
+      System.out.println(
+          "Los tipos de problemas asociados al incidente reportado no coinciden con el servicio adjuntado.\n");
+
+      handlerTypesProblem(newIncident);
+
+      incidentService = newIncident.getIncident_service();
+      typesProblemOfIncidentService = incidentService.getTypesProblem();
+    }
+
+    GenerateIncident.issueIncident(newIncident);
+
+    ReportIncident.reportNewIncident(newIncident);
 
     scanner.close();
 
@@ -216,12 +235,9 @@ public class Operator {
       if (isInvalidOption) {
         System.out.print("Opción inválida.\n\n");
       } else {
-
         Service selectedService = services.get(option - 1);
 
-        if (!client_services.contains(selectedService)) {
-          client_services.add(selectedService);
-        }
+        incident.setIncident_service(selectedService);
       }
     } while (isInvalidOption);
   }
