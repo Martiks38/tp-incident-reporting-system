@@ -281,7 +281,7 @@ public class Operator {
     boolean isInvalidDescription = true;
 
     do {
-      System.out.print("Ingrese una descripción del problema. (máximo 255 caracteres)");
+      System.out.print("Ingrese una descripción del problema. (máximo 255 caracteres)\n\n");
 
       String incidentDescription = scanner.nextLine();
       int lengthIncidentDescription = incidentDescription.length();
@@ -344,12 +344,18 @@ public class Operator {
 
     } while (isInvalidOption);
 
-    Long minAverageTimeByResolveInDays = typeProblems.stream()
+    notifyIncident(incident);
+  }
+
+  private static void notifyIncident(Incident incident) {
+    List<TypeProblem> typesProblem = incident.getIncident_type_problem();
+
+    Long minAverageTimeByResolveInDays = typesProblem.stream()
         .min(Comparator.comparingLong(TypeProblem::getEstimated_resolution_time))
         .map(TypeProblem::getEstimated_resolution_time)
         .orElse(null);
 
-    Long maxResolutionTimeInDays = typeProblems.stream()
+    Long maxResolutionTimeInDays = typesProblem.stream()
         .max(Comparator.comparing(TypeProblem::getMaximum_resolution_time))
         .map(TypeProblem::getMaximum_resolution_time)
         .orElse(null);
@@ -396,7 +402,7 @@ public class Operator {
     String clientMessage = "Mensaje para el client.\nSu incidente ya ha sido ingresado. Se estima que su problema estará solucionado para el día"
         + estimatedDateForSolution + "\n\nMuchas gracias por elegirnos.";
 
-    client.notifyIncident(clientMessage);
+    client.receiveIncidentNotification(clientMessage);
 
     Long id = incident.getIncident_id();
     String description = incident.getDescription();
@@ -406,6 +412,6 @@ public class Operator {
         + "\" con fecha de solución para el "
         + estimatedDateForSolution + ".\n\nDescripción\n" + description;
 
-    technical.notifyIncident(technicalMessage);
+    technical.receiveIncidentNotification(technicalMessage);
   }
 }

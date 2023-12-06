@@ -133,7 +133,7 @@ public class Technical {
     }
   }
 
-  public void notifyIncident(String message) {
+  public void receiveIncidentNotification(String message) {
 
     String favoriteNotificationMedium = this.medium.getMedium();
 

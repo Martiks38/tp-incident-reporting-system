@@ -100,7 +100,7 @@ public class Client {
         '}';
   }
 
-  public void notifyIncident(String message) {
+  public void receiveIncidentNotification(String message) {
     NotifyDecorator notify = new EmailDecorator(new NotifyBasic());
 
     notify.emitMessage(message, this.mail);
