@@ -24,6 +24,7 @@ import com.tp.infrastructure.incident.PersistenceIncident;
 import com.tp.infrastructure.service.PersistenceService;
 import com.tp.infrastructure.technical.PersistenceTechnical;
 import com.tp.infrastructure.type_problem.PersistenceTypeProblem;
+import com.tp.utils.GetDate;
 
 import jakarta.persistence.EntityManager;
 
@@ -41,11 +42,11 @@ public class Operator {
     Client customer = new Client();
 
     System.out.print("Buenos días.");
-    System.out.print("Por favor ingrese su razón social.");
+    System.out.print("Por favor ingrese su razón social: ");
 
     business_name = scanner.nextLine();
 
-    System.out.print("Por favor ingrese su cuit");
+    System.out.print("Por favor ingrese su cuit: ");
 
     cuit = scanner.nextLine();
 
@@ -91,15 +92,34 @@ public class Operator {
       } else {
         System.out.println(
             "Los tipos de problemas asociados al incidente reportado no coinciden con el servicio adjuntado.\n");
+        /*
+         * TODO
+         * 
+         * Hacer q pueda reemplazar el servicio o los tipos de problemas
+         * 
+         */
       }
 
     } else {
+      /*
+       * TODO
+       * 
+       * Terminar esta sección
+       * 
+       */
       System.out.print("El cliente tiene contratado los siguientes servicios:\n\n");
 
       customer.getClient_services().forEach(service -> {
         System.out.print(service.getService_name() + "\n");
       });
     }
+
+    /**
+     * TODO
+     * 
+     * El cliente debe elegir un servicio para continuar
+     * 
+     */
 
     scanner.close();
 
@@ -334,15 +354,9 @@ public class Operator {
         .map(TypeProblem::getMaximum_resolution_time)
         .orElse(null);
 
-    LocalDate miniumResolutionDay = LocalDate.now()
-        .atStartOfDay(GMTTimeZone)
-        .plusDays(minAverageTimeByResolveInDays)
-        .toLocalDate();
+    LocalDate miniumResolutionDay = GetDate.calculateDateFromToday(minAverageTimeByResolveInDays);
 
-    LocalDate maxResolutionDay = LocalDate.now()
-        .atStartOfDay(GMTTimeZone)
-        .plusDays(maxResolutionTimeInDays)
-        .toLocalDate();
+    LocalDate maxResolutionDay = GetDate.calculateDateFromToday(maxResolutionTimeInDays);
 
     LocalDate estimatedDateForSolution = miniumResolutionDay;
 
