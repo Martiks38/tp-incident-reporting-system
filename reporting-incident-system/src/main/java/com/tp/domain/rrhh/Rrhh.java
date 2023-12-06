@@ -166,7 +166,8 @@ public class Rrhh {
 
     Optional<Entry<Technical, List<Incident>>> technicalWithMostResolvedIncidentsInLastNDays = incidentsResolvedInLastNDays
         .entrySet()
-        .stream().max(Comparator.comparingInt(entry -> entry.getValue().size()));
+        .stream()
+        .max(Comparator.comparingInt(entry -> entry.getValue().size()));
 
     if (technicalWithMostResolvedIncidentsInLastNDays.isPresent()) {
       Technical technical = technicalWithMostResolvedIncidentsInLastNDays.get().getKey();
