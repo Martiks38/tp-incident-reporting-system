@@ -301,22 +301,6 @@ public class Operator {
 
     possibleTechnicians.forEach(Technical::getTechnical_name);
 
-    /*
-     * TODO
-     * 
-     * Añadir elección de técnico [X]
-     * luego del do while actualizar incident creado
-     * El operador debe establecer la fecha de solución (opcional para el si agrega
-     * más tiempo o toma el valor por defecto)
-     * Informar al cliente de la posible fecha de solución
-     * Notificar al técnico de del incidente
-     * 
-     * Añadir en el main un método de technical q tome un incidente y lo resuelva
-     * 
-     * Con esto estaría terminado al hacer si el cliente tiene servicios
-     * 
-     */
-
     boolean isInvalidOption = true;
     int amountPossibleTechnician = possibleTechnicians.size();
     int option = -1;
@@ -394,16 +378,20 @@ public class Operator {
       } while (selectedAdditionalTime < 0 || selectedAdditionalTime > additionalTime);
     }
 
-    /*
-     * TODO
-     * 
-     * Aplicar método de notificación a correo del cliente
-     * 
-     */
-    System.out.print("Mensaje para el client.");
-    System.out.println("Su incidente ya ha sido ingresado. Se estima que su problema estará solucionado para el día"
-        + estimatedDateForSolution);
-    System.out.print("Muchas gracias por elegirnos.");
+    Client client = incident.getClient();
+    String clientMessage = "Mensaje para el client.\nSu incidente ya ha sido ingresado. Se estima que su problema estará solucionado para el día"
+        + estimatedDateForSolution + "\n\nMuchas gracias por elegirnos.";
 
+    client.notifyIncident(clientMessage);
+
+    Long id = incident.getIncident_id();
+    String description = incident.getDescription();
+
+    Technical technical = incident.getTechnical();
+    String technicalMessage = "Buenos días.\nSe le ha asignado el incidente id: \"" + id
+        + "\" con fecha de solución para el "
+        + estimatedDateForSolution + ".\n\nDescripción\n" + description;
+
+    technical.notifyIncident(technicalMessage);
   }
 }
