@@ -7,6 +7,10 @@ import org.hibernate.type.NumericBooleanConverter;
 import com.tp.application.GetEntityManager;
 import com.tp.domain.incident.Incident;
 import com.tp.domain.notificationMedium.NotificationMedium;
+import com.tp.domain.notify.EmailDecorator;
+import com.tp.domain.notify.NotifyBasic;
+import com.tp.domain.notify.NotifyDecorator;
+import com.tp.domain.notify.WhatsappDecorator;
 import com.tp.domain.specialty.Specialty;
 import com.tp.infrastructure.notificationMedium.PersistenceNotificationMedium;
 
@@ -126,6 +130,23 @@ public class Technical {
       // base de datos que almacene los errores
       e.printStackTrace();
       System.err.println("Error en la transacción: " + e.getMessage());
+    }
+  }
+
+  public void notifyIncident(String message) {
+
+    String favoriteNotificationMedium = this.medium.getMedium();
+
+    if (favoriteNotificationMedium.equals("Email")) {
+      NotifyDecorator notificationMedium = new EmailDecorator(new NotifyBasic());
+
+      notificationMedium.emitMessage(message, this.mail);
+    }
+
+    if (favoriteNotificationMedium.equals("WhatsApp")) {
+      NotifyDecorator notificationMedium = new WhatsappDecorator(new NotifyBasic());
+
+      notificationMedium.emitMessage(message, this.phone_number);
     }
   }
 

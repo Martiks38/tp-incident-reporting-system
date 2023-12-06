@@ -6,6 +6,9 @@ import java.util.Objects;
 import org.hibernate.type.NumericBooleanConverter;
 
 import com.tp.domain.incident.Incident;
+import com.tp.domain.notify.EmailDecorator;
+import com.tp.domain.notify.NotifyBasic;
+import com.tp.domain.notify.NotifyDecorator;
 import com.tp.domain.service.Service;
 
 import jakarta.persistence.CascadeType;
@@ -95,5 +98,11 @@ public class Client {
         ", mail='" + mail + '\'' +
         ", state=" + state +
         '}';
+  }
+
+  public void notifyIncident(String message) {
+    NotifyDecorator notify = new EmailDecorator(new NotifyBasic());
+
+    notify.emitMessage(message, this.mail);
   }
 }
