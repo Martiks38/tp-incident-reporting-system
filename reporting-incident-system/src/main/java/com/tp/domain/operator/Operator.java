@@ -76,21 +76,20 @@ public class Operator {
       Service incidentService = newIncident.getIncident_service();
       List<TypeProblem> typesProblemOfIncidentService = incidentService.getTypesProblem();
 
-      if (typesProblemOfIncidentService.containsAll(newIncident.getIncident_type_problem())) {
+      while (typesProblemOfIncidentService.containsAll(newIncident.getIncident_type_problem())) {
 
-        GenerateIncident.issueIncident(newIncident);
-
-        ReportIncident.reportNewIncident(newIncident);
-      } else {
         System.out.println(
             "Los tipos de problemas asociados al incidente reportado no coinciden con el servicio adjuntado.\n");
-        /*
-         * TODO
-         * 
-         * Hacer q pueda reemplazar el servicio o los tipos de problemas
-         * 
-         */
+
+        handlerTypesProblem(newIncident);
+
+        incidentService = newIncident.getIncident_service();
+        typesProblemOfIncidentService = incidentService.getTypesProblem();
       }
+
+      GenerateIncident.issueIncident(newIncident);
+
+      ReportIncident.reportNewIncident(newIncident);
 
     } else {
       /*
