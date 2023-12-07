@@ -33,7 +33,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "incident", schema = "incident")
 @Entity
-public class Incident {
+public class Incident implements IncidentObservable {
+  private IncidentObserver clientObserver;
+
   @Id
   @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,10 +58,16 @@ public class Incident {
     this.incident_type_problem = incident_type_problem;
   }
 
-  @Setter
   @Convert(converter = NumericBooleanConverter.class)
   @Column(nullable = false)
   private Boolean resolved;
+
+  public void setResolved(boolean resolved) {
+    if (resolved) {
+      this.resolved = resolved;
+      this.notifyObservable();
+    }
+  }
 
   @Setter
   @Column(nullable = false)
@@ -103,17 +111,20 @@ public class Incident {
   Service incident_service;
 
   @Override
-  public String toString() {
-    return "Incident{" +
-        "incident_id=" + incident_id +
-        ", resolved=" + resolved +
-        ", description='" + description + '\'' +
-        ", considerations='" + considerations + '\'' +
-        ", create_time=" + create_time +
-        ", time_is_up=" + time_is_up +
-        ", state=" + state +
-        ", technical=" + technical +
-        ", client=" + client +
-        '}';
+  public void subscribe(IncidentObserver client) {
+    this.clientObserver = client;
+  }
+
+  @Override
+  public void unsubscribe(IncidentObserver client) {
+    this.clientObserver = null;
+  }
+
+  @Override
+  public void notifyObservable() {
+    if (clientObserver == null)
+      return;
+
+    clientObserver.update(this);
   }
 }

@@ -71,6 +71,7 @@ public class ReportIncident {
         + estimatedDateForSolution + "\n\nMuchas gracias por elegirnos.";
 
     client.receiveIncidentNotification(clientMessage);
+    incident.subscribe(client);
 
     Long id = incident.getIncident_id();
     String description = incident.getDescription();

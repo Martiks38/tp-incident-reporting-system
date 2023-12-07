@@ -6,6 +6,7 @@ import java.util.Objects;
 import org.hibernate.type.NumericBooleanConverter;
 
 import com.tp.domain.incident.Incident;
+import com.tp.domain.incident.IncidentObserver;
 import com.tp.domain.notify.EmailDecorator;
 import com.tp.domain.notify.NotifyBasic;
 import com.tp.domain.notify.NotifyDecorator;
@@ -31,7 +32,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "client", schema = "client")
 @Entity
-public class Client {
+public class Client implements IncidentObserver {
   @Id
   @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -89,20 +90,21 @@ public class Client {
         && Objects.equals(incidents, client.incidents) && Objects.equals(client_services, client.client_services);
   }
 
-  @Override
-  public String toString() {
-    return "Client{" +
-        "client_id=" + client_id +
-        ", cuit='" + cuit + '\'' +
-        ", business_name='" + business_name + '\'' +
-        ", mail='" + mail + '\'' +
-        ", state=" + state +
-        '}';
-  }
-
   public void receiveIncidentNotification(String message) {
     NotifyDecorator notify = new EmailDecorator(new NotifyBasic());
 
     notify.emitMessage(message, this.mail);
   }
+
+  @Override
+  public void update(Incident incident) {
+    if (incident.getResolved()) {
+      String message = "Buenos días.\nLe notificamos que el incidente reportado por " + this.business_name
+          + " ya ha sido solucionado.\n\nIncidente:\n" + incident.getDescription() + "\n\nConsideraciones:\n"
+          + incident.getConsiderations();
+
+      receiveIncidentNotification(message);
+    }
+  }
+
 }
