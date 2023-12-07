@@ -1,29 +1,36 @@
 package com.tp.domain.operator;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
+import com.tp.application.GetEntityManager;
 import com.tp.domain.client.Client;
 import com.tp.domain.incident.Incident;
 import com.tp.domain.technical.Technical;
 import com.tp.domain.type_problem.TypeProblem;
+import com.tp.infrastructure.incident.PersistenceIncident;
 import com.tp.utils.GetDate;
+
+import jakarta.persistence.EntityManager;
 
 public class ReportIncident {
 
   public static void reportNewIncident(Incident incident) {
+    EntityManager manager = GetEntityManager.getManager();
+    PersistenceIncident persistenceIncident = new PersistenceIncident(manager);
     Scanner scanner = new Scanner(System.in);
 
     List<TypeProblem> typesProblem = incident.getIncident_type_problem();
 
-    Long minAverageTimeByResolveInDays = typesProblem.stream()
-        .min(Comparator.comparingLong(TypeProblem::getEstimated_resolution_time))
+    int minAverageTimeByResolveInDays = typesProblem.stream()
+        .min(Comparator.comparing(TypeProblem::getEstimated_resolution_time))
         .map(TypeProblem::getEstimated_resolution_time)
         .orElse(null);
 
-    Long maxResolutionTimeInDays = typesProblem.stream()
+    int maxResolutionTimeInDays = typesProblem.stream()
         .max(Comparator.comparing(TypeProblem::getMaximum_resolution_time))
         .map(TypeProblem::getMaximum_resolution_time)
         .orElse(null);
@@ -44,7 +51,7 @@ public class ReportIncident {
     String optionModify = scanner.nextLine().toLowerCase();
 
     if (optionModify.equals("y")) {
-      Long additionalTime = maxResolutionTimeInDays - minAverageTimeByResolveInDays;
+      int additionalTime = maxResolutionTimeInDays - minAverageTimeByResolveInDays;
 
       Long selectedAdditionalTime = -1L;
       boolean incorrectSelectedAdditionalTime = true;
@@ -65,6 +72,10 @@ public class ReportIncident {
 
       } while (selectedAdditionalTime < 0 || selectedAdditionalTime > additionalTime);
     }
+
+    incident.setDeadline(Date.valueOf(estimatedDateForSolution));
+
+    persistenceIncident.update(incident);
 
     Client client = incident.getClient();
     String clientMessage = "Mensaje para el client.\nSu incidente ya ha sido ingresado. Se estima que su problema estará solucionado para el día"
