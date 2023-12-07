@@ -263,9 +263,9 @@ CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`incident__type_problem` 
 
   INSERT INTO `incident-reporting-system`.technical
   VALUES
-      (1, "Maider Gomez", 2, 14400043, "maidergomez@gmail.com", "3476123456", 1, 1),
-      (2, "Gheorghe Galindo", 5, 32400000, "gheorghe.galindo@hotmail.com", "3411234567", 2, 1),
-      (3, "Cesareo Gutierrez", 1, 14400981, "cesareo@gutierrez.com", "1112345678", 1, 1),
+      (1, "Maider Gomez", 2, 30, "maidergomez@gmail.com", "3476123456", 1, 1),
+      (2, "Gheorghe Galindo", 5, 21, "gheorghe.galindo@hotmail.com", "3411234567", 2, 1),
+      (3, "Cesareo Gutierrez", 1, 42, "cesareo@gutierrez.com", "1112345678", 1, 1),
       (4, "Alejandra Puerta", 0, null, "alejandra_puerta@outlook.com", "3421234567", 2, 0);
 
   INSERT INTO `incident-reporting-system`.specialty
@@ -376,4 +376,3 @@ INSERT INTO `incident-reporting-system`.incident__type_problem
 -- SELECT * FROM technical__specialty;
 -- SELECT * FROM type_problem__specialty;
 -- SELECT * FROM service__type_problem;
-    
