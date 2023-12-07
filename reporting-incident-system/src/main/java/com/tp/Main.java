@@ -1,5 +1,6 @@
 package com.tp;
 
+import com.tp.domain.incident.InitSuscribeIncidents;
 import com.tp.domain.operator.Operator;
 import com.tp.domain.rrhh.Rrhh;
 
@@ -15,6 +16,8 @@ public class Main {
         final int days = 7;
         final String specialty_name1 = "training";
         final String specialty_name2 = "software";
+
+        InitSuscribeIncidents.initExecution();
 
         do {
             System.out.println("Menú:");
