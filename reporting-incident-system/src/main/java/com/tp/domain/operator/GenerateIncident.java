@@ -66,6 +66,8 @@ public class GenerateIncident {
 
         incident.setTechnical(selectedTechnical);
 
+        incident.subscribe(incident.getClient());
+
         persistenceIncident.save(incident);
       }
 
