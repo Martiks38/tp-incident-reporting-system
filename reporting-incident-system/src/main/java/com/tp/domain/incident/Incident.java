@@ -87,6 +87,10 @@ public class Incident implements IncidentObservable {
   private Date time_is_up;
 
   @Setter
+  @Temporal(TemporalType.DATE)
+  private Date deadline;
+
+  @Setter
   @Convert(converter = NumericBooleanConverter.class)
   @Column(nullable = false)
   private Boolean state;
