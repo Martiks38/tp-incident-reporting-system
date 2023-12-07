@@ -1,6 +1,10 @@
 package com.tp.domain.technical;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Random;
 
 import org.hibernate.type.NumericBooleanConverter;
 
@@ -12,7 +16,10 @@ import com.tp.domain.notify.NotifyBasic;
 import com.tp.domain.notify.NotifyDecorator;
 import com.tp.domain.notify.WhatsappDecorator;
 import com.tp.domain.specialty.Specialty;
+import com.tp.infrastructure.incident.PersistenceIncident;
 import com.tp.infrastructure.notificationMedium.PersistenceNotificationMedium;
+import com.tp.infrastructure.technical.PersistenceTechnical;
+import com.tp.utils.GetDate;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -39,6 +46,8 @@ import lombok.Setter;
 @Table(name = "technical", schema = "technical")
 @Entity
 public class Technical {
+
+  static final EntityManager manager = GetEntityManager.getManager();
 
   @Id
   @Column(name = "id", nullable = false)
@@ -103,7 +112,6 @@ public class Technical {
   private List<Specialty> specialties;
 
   public void setPreferredNotificationMethod(String medium) {
-    EntityManager manager = GetEntityManager.getManager();
     EntityTransaction transaction = manager.getTransaction();
 
     PersistenceNotificationMedium persistenceNotificationMedium = new PersistenceNotificationMedium(manager);
@@ -135,19 +143,48 @@ public class Technical {
 
   public void receiveIncidentNotification(String message) {
 
-    String favoriteNotificationMedium = this.medium.getMedium();
+    String favoriteNotificationMedium = this.medium.getMedium().toLowerCase();
 
-    if (favoriteNotificationMedium.equals("Email")) {
+    if (favoriteNotificationMedium.equals("email")) {
       NotifyDecorator notificationMedium = new EmailDecorator(new NotifyBasic());
 
       notificationMedium.emitMessage(message, this.mail);
     }
 
-    if (favoriteNotificationMedium.equals("WhatsApp")) {
+    if (favoriteNotificationMedium.equals("whatsapp")) {
       NotifyDecorator notificationMedium = new WhatsappDecorator(new NotifyBasic());
 
       notificationMedium.emitMessage(message, this.phone_number);
     }
+  }
+
+  void resolveIncident(Incident incident, String considerations) {
+    PersistenceIncident persistenceIncident = new PersistenceIncident(manager);
+    PersistenceTechnical persistenceTechnical = new PersistenceTechnical(manager);
+
+    /* Simula la fecha de finalización de un incidente */
+    Random random = new Random();
+    LocalDate startDateIncident = incident.getCreate_time().toLocalDate();
+    LocalDate deadlineIncident = incident.getDeadline().toLocalDate();
+
+    int deliveryTime = (int) ChronoUnit.DAYS.between(startDateIncident, deadlineIncident);
+
+    int numberDaysEmployed = random.nextInt() * deliveryTime;
+
+    LocalDate finishDate = GetDate.calculateDate(startDateIncident, numberDaysEmployed);
+    Date resolvedIncident = Date.valueOf(finishDate);
+
+    incident.setConsiderations(considerations);
+    incident.setResolved(true);
+    incident.setTime_is_up(resolvedIncident);
+
+    if (this.incident_resolution_speed > numberDaysEmployed) {
+      this.setIncident_resolution_speed((long) numberDaysEmployed);
+
+      persistenceTechnical.update(this);
+    }
+
+    persistenceIncident.update(incident);
   }
 
 }
