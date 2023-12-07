@@ -28,8 +28,6 @@ public class GenerateIncident {
     List<Technical> possibleTechnicians = new ArrayList<>();
     List<TypeProblem> typeProblems = incident.getIncident_type_problem();
 
-    persistenceIncident.save(incident);
-
     possibleTechnicians = technicals
         .stream()
         .filter(t -> {
