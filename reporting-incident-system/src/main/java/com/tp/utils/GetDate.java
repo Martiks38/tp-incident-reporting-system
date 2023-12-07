@@ -11,11 +11,17 @@ public class GetDate {
   public static LocalDate calculateDateFromToday(Integer numberDays) {
     LocalDate currentDate = LocalDate.now();
 
-    if (numberDays == null) {
+    if (numberDays == null)
       return currentDate;
-    }
 
     return currentDate
+        .atStartOfDay(GMTTimeZone)
+        .plusDays(numberDays)
+        .toLocalDate();
+  }
+
+  public static LocalDate calculateDate(LocalDate date, Integer numberDays) {
+    return date
         .atStartOfDay(GMTTimeZone)
         .plusDays(numberDays)
         .toLocalDate();
