@@ -104,6 +104,8 @@ public class Client implements IncidentObserver {
           + incident.getConsiderations();
 
       receiveIncidentNotification(message);
+
+      incident.unsubscribe(this);
     }
   }
 
