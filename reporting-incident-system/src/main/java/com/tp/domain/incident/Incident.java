@@ -25,6 +25,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,8 +35,6 @@ import lombok.Setter;
 @Table(name = "incident", schema = "incident")
 @Entity
 public class Incident implements IncidentObservable {
-  private IncidentObserver clientObserver;
-
   @Id
   @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,6 +56,9 @@ public class Incident implements IncidentObservable {
     this.client = client;
     this.incident_type_problem = incident_type_problem;
   }
+
+  @Transient
+  private IncidentObserver clientObserver;
 
   @Convert(converter = NumericBooleanConverter.class)
   @Column(nullable = false)
