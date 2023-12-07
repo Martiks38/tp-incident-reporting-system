@@ -8,7 +8,7 @@ import com.tp.assets.Constant;
 public class GetDate {
   static final ZoneId GMTTimeZone = Constant.GMT_TIME_ZONE;
 
-  public static LocalDate calculateDateFromToday(Long numberDays) {
+  public static LocalDate calculateDateFromToday(Integer numberDays) {
     LocalDate currentDate = LocalDate.now();
 
     if (numberDays == null) {

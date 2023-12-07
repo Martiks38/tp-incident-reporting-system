@@ -29,7 +29,7 @@ public class TypeProblem {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long type_problem_id;
 
-  public TypeProblem(String type_problem_name, Long maximum_resolution_time, Long estimated_resolution_time,
+  public TypeProblem(String type_problem_name, Integer maximum_resolution_time, Integer estimated_resolution_time,
       List<Specialty> specialties) {
     this.type_problem_name = type_problem_name;
     this.maximum_resolution_time = maximum_resolution_time;
@@ -43,11 +43,11 @@ public class TypeProblem {
 
   @Setter
   @Column(nullable = false)
-  private Long maximum_resolution_time;
+  private Integer maximum_resolution_time;
 
   @Setter
   @Column(nullable = false)
-  private Long estimated_resolution_time;
+  private Integer estimated_resolution_time;
 
   @Setter
   @Column(nullable = false)
