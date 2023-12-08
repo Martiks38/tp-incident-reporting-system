@@ -17,7 +17,7 @@ public class Main {
         InitSuscribeIncidents.initExecution();
 
         do {
-            System.out.println("Menú:");
+            System.out.println("\nMenú:");
             System.out.println("1. Emitir reporte con los incidentes asignados a cada técnico.");
             System.out.println("2. Emitir reporte del técnico con mayor velocidad al resolve un incidente.");
             System.out.println("3. Emitir reporte del técnico con más incidentes resueltos hace N días.");

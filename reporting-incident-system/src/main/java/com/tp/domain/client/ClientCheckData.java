@@ -1,6 +1,6 @@
 package com.tp.domain.client;
 
-import com.tp.utils.CheckFormatEmail;
+import com.tp.utils.CheckFormat;
 
 public class ClientCheckData {
 
@@ -19,7 +19,11 @@ public class ClientCheckData {
       message += "El nombre del negocio no puede estar vacío.\n";
     }
 
-    if (!CheckFormatEmail.isValidEmail(mail)) {
+    if (!CheckFormat.isValidBusinessName(bussiness_name)) {
+      message += "El nombre del negocio no es válido.\n";
+    }
+
+    if (!CheckFormat.isValidEmail(mail)) {
       message += "El email ingresado no es válido.\n";
     }
 

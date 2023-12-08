@@ -4,8 +4,7 @@ import java.util.List;
 
 import com.tp.domain.notificationMedium.NotificationMedium;
 import com.tp.domain.specialty.Specialty;
-import com.tp.utils.CheckFormatEmail;
-import com.tp.utils.CheckFormatName;
+import com.tp.utils.CheckFormat;
 
 public class TechnicalCheckData {
 
@@ -20,7 +19,7 @@ public class TechnicalCheckData {
     List<Specialty> specialties = t.getSpecialties();
     NotificationMedium medium = t.getMedium();
 
-    if (!CheckFormatName.isValidName(name)) {
+    if (!CheckFormat.isValidName(name)) {
       message += "El nombre del técnico no puede estar vacío.\n";
     }
 
@@ -32,7 +31,7 @@ public class TechnicalCheckData {
       message += "La velocidad de resolución de incidentes no puede ser menor a cero (0).\n";
     }
 
-    if (!CheckFormatEmail.isValidEmail(mail)) {
+    if (!CheckFormat.isValidEmail(mail)) {
       message += "El email ingresado no es válido.\n";
     }
 
