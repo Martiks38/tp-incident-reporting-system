@@ -9,7 +9,7 @@ import jakarta.persistence.EntityManager;
 
 public class ComercialArea {
 
-  public static void handlerClient(Client client, ActionClient action, Long id) {
+  public static void handlerClient(Client client, ActionClient action) {
     EntityManager manager = GetEntityManager.getManager();
 
     PersistenceClient conectionClient = new PersistenceClient(manager);
@@ -19,7 +19,7 @@ public class ComercialArea {
     }
 
     if (action == ActionClient.REMOVE_CLIENT) {
-      conectionClient.delete(id);
+      conectionClient.delete(client);
     }
 
     if (action == ActionClient.UPDATE_CLIENT) {
