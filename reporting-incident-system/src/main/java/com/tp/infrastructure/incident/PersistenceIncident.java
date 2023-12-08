@@ -36,7 +36,7 @@ public class PersistenceIncident implements IncidentDAO {
 
       IncidentCheckData.check(data);
 
-      manager.persist(data);
+      manager.merge(data);
 
       transaction.commit();
 

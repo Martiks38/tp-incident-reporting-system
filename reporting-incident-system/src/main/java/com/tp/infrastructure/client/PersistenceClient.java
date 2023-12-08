@@ -61,7 +61,7 @@ public class PersistenceClient implements ClientDAO {
 
       ClientCheckData.check(data);
 
-      manager.persist(data);
+      manager.merge(data);
 
       transaction.commit();
 

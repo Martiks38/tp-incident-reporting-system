@@ -61,7 +61,7 @@ public class PersistenceTechnical implements TechnicalDAO {
 
       TechnicalCheckData.check(data);
 
-      manager.persist(data);
+      manager.merge(data);
 
       transaction.commit();
 
