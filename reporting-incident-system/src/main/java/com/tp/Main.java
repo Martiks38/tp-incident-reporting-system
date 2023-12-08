@@ -30,6 +30,8 @@ public class Main {
 
             opcion = scanner.nextInt();
 
+            scanner.nextLine();
+
             switch (opcion) {
                 case 1:
                     Rrhh.generateReport();
