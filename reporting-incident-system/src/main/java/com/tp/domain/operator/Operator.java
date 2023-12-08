@@ -30,23 +30,16 @@ public class Operator {
   public static void assistCustomer() {
     PersistenceClient persistenceClient = new PersistenceClient(manager);
 
-    String business_name;
-    String cuit;
-
     Client customer = new Client();
 
-    System.out.print("Buenos días.");
-    System.out.print("Por favor ingrese su razón social: ");
-
-    business_name = scanner.nextLine();
-
-    System.out.print("Por favor ingrese su cuit: ");
-
-    cuit = scanner.nextLine();
-
-    customer.setBusiness_name(business_name);
-    customer.setCuit(cuit);
     customer.setState(true);
+
+    System.out.print("\nBuenos días.\n\n");
+    System.out.print("Por favor ingrese su razón social: ");
+    customer.setBusiness_name(scanner.nextLine());
+
+    System.out.print("\nPor favor ingrese su cuit: ");
+    customer.setCuit(scanner.nextLine());
 
     findClientDate(customer, persistenceClient);
 
@@ -62,34 +55,34 @@ public class Operator {
     newIncident.setState(true);
 
     if (client_services.size() == 0) {
-      System.out.print("Mensaje para el Operador");
-      System.out.print("No ha contratado ningún servicio.");
+      System.out.println("Mensaje para el Operador");
+      System.out.println("No ha contratado ningún servicio.");
 
-      System.out.print("Mensaje para el cliente");
-      System.out.print("¿Cuál de nuestros servicios desea contratar?\n\n");
+      System.out.println("Mensaje para el cliente");
+      System.out.println("¿Cuál de nuestros servicios desea contratar?\n\n");
 
       handlerServiceClient(customer, newIncident);
 
     } else {
 
-      System.out.print("Mensaje para el operador.");
-      System.out.print("El cliente tiene contratado los siguientes servicios:\n\n");
+      System.out.println("Mensaje para el operador.");
+      System.out.println("El cliente tiene contratado los siguientes servicios:\n");
 
       List<Service> clientServices = customer.getClient_services();
       int amountClientServices = clientServices.size();
 
       clientServices.forEach(service -> {
-        System.out.print(service.getService_name() + "\n");
+        System.out.println(service.getService_name());
       });
 
       boolean isInvalidOption = true;
       int optionService = -1;
 
-      System.out.print("Mensaje para el cliente.");
+      System.out.println("Mensaje para el cliente.");
 
       do {
         System.out
-            .print("Por favor elija con cuál servicio desea reportar el incidente. (1-" + amountClientServices + ")");
+            .println("Por favor elija con cuál servicio desea reportar el incidente. (1-" + amountClientServices + ")");
 
         customer.getClient_services().forEach(service -> {
           System.out.print(" -\t" + service.getService_name() + "\n");
@@ -138,25 +131,25 @@ public class Operator {
     Client customerData = persistenceClient.findByName(client.getBusiness_name());
 
     if (customerData != null) {
-      client = customerData;
+      client.copyProperties(customerData);
     }
 
     if (customerData == null || !customerData.getState()) {
       String email;
 
       System.out
-          .print("Es un cliente nuevo le vamos a pedir que ingrese los datos que le solicitaremos a continuación.");
-      System.out.print("Ingrese una cuenta de email.");
+          .print("Es un cliente nuevo le vamos a pedir que ingrese los datos que le solicitaremos a continuación.\n\n");
+      System.out.print("Ingrese una cuenta de email. ");
 
       email = scanner.nextLine();
 
-      System.out.print("Muchas gracias.");
+      System.out.print("\n\nMuchas gracias.");
 
       client.setMail(email);
       client.setClient_services(new ArrayList<>());
       client.setIncidents(new ArrayList<>());
 
-      ComercialArea.handlerClient(client, ActionClient.CREATE_CLIENT, null);
+      ComercialArea.handlerClient(client, ActionClient.CREATE_CLIENT);
     }
   }
 
@@ -212,7 +205,7 @@ public class Operator {
 
     customer.setClient_services(client_services);
 
-    ComercialArea.handlerClient(customer, ActionClient.UPDATE_CLIENT, null);
+    ComercialArea.handlerClient(customer, ActionClient.UPDATE_CLIENT);
 
     int amountClientServices = client_services.size();
     isInvalidOption = true;
