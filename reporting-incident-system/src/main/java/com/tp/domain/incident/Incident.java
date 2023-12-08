@@ -65,13 +65,13 @@ public class Incident implements IncidentObservable {
   private Boolean resolved;
 
   public void setResolved(boolean resolved) {
+    if (this.resolved == null) {
+      this.resolved = resolved;
+    }
+
     if (this.resolved != resolved && resolved) {
       this.resolved = resolved;
       this.notifyObservable();
-    }
-
-    if (this.resolved == null) {
-      this.resolved = resolved;
     }
   }
 
