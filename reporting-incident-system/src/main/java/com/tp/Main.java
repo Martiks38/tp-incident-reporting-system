@@ -1,5 +1,6 @@
 package com.tp;
 
+import com.tp.application.GetScanner;
 import com.tp.domain.incident.InitSuscribeIncidents;
 import com.tp.domain.operator.Operator;
 import com.tp.domain.rrhh.Rrhh;
@@ -9,7 +10,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = GetScanner.getScanner();
 
         int opcion;
 
@@ -30,9 +31,9 @@ public class Main {
             System.out.println("6. Salir");
 
             System.out.print("Elige una opción (1-6): ");
+
             opcion = scanner.nextInt();
 
-            System.out.println();
             switch (opcion) {
                 case 1:
                     Rrhh.generateReport();
@@ -41,7 +42,7 @@ public class Main {
                     Rrhh.technicianWithFasterIncidentResolution();
                     break;
                 case 3:
-                    Rrhh.technicianWithMostIncidentsForNDays(days);
+                    Rrhh.technicianWithMostIncidentsForNDays();
                     break;
                 case 4:
                     Rrhh.technicianWithMostIncidentsForNDaysBySpecialty(days, specialty_name1);
@@ -63,8 +64,6 @@ public class Main {
             System.out.println();
         } while (opcion != 6);
 
-        scanner.close();
-
+        GetScanner.closeScanner();
     }
-
 }

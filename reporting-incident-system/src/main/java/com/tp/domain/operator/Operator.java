@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.tp.application.GetEntityManager;
+import com.tp.application.GetScanner;
 import com.tp.assets.ActionClient;
 import com.tp.assets.Constant;
 import com.tp.domain.client.Client;
@@ -22,7 +23,7 @@ import com.tp.infrastructure.type_problem.PersistenceTypeProblem;
 import jakarta.persistence.EntityManager;
 
 public class Operator {
-  static final Scanner scanner = new Scanner(System.in);
+  static final Scanner scanner = GetScanner.getScanner();
   static final EntityManager manager = GetEntityManager.getManager();
   static final ZoneId GMTTimeZone = Constant.GMT_TIME_ZONE;
 
@@ -130,8 +131,6 @@ public class Operator {
     GenerateIncident.issueIncident(newIncident);
 
     ReportIncident.reportNewIncident(newIncident);
-
-    scanner.close();
 
   }
 

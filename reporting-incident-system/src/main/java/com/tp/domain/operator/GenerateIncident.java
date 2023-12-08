@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.tp.application.GetEntityManager;
+import com.tp.application.GetScanner;
 import com.tp.domain.incident.Incident;
 import com.tp.domain.specialty.Specialty;
 import com.tp.domain.technical.Technical;
@@ -19,7 +20,7 @@ public class GenerateIncident {
   private static EntityManager manager = GetEntityManager.getManager();
 
   public static void issueIncident(Incident incident) {
-    Scanner scanner = new Scanner(System.in);
+    Scanner scanner = GetScanner.getScanner();
 
     PersistenceIncident persistenceIncident = new PersistenceIncident(manager);
     PersistenceTechnical persistenceTechnical = new PersistenceTechnical(manager);
@@ -73,7 +74,6 @@ public class GenerateIncident {
 
     } while (isInvalidOption);
 
-    scanner.close();
   }
 
 }

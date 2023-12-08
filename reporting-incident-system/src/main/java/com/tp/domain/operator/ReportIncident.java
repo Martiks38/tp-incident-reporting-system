@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.tp.application.GetEntityManager;
+import com.tp.application.GetScanner;
 import com.tp.domain.client.Client;
 import com.tp.domain.incident.Incident;
 import com.tp.domain.technical.Technical;
@@ -21,7 +22,7 @@ public class ReportIncident {
   public static void reportNewIncident(Incident incident) {
     EntityManager manager = GetEntityManager.getManager();
     PersistenceIncident persistenceIncident = new PersistenceIncident(manager);
-    Scanner scanner = new Scanner(System.in);
+    Scanner scanner = GetScanner.getScanner();
 
     List<TypeProblem> typesProblem = incident.getIncident_type_problem();
 
@@ -94,7 +95,6 @@ public class ReportIncident {
 
     technical.receiveIncidentNotification(technicalMessage);
 
-    scanner.close();
   }
 
 }
