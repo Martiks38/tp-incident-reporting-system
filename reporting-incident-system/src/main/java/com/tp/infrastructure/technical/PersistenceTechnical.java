@@ -97,13 +97,11 @@ public class PersistenceTechnical implements TechnicalDAO {
   }
 
   @Override
-  public void delete(Long id) {
+  public void delete(Technical technical) {
     EntityTransaction transaction = manager.getTransaction();
 
     try {
       transaction.begin();
-
-      Technical technical = manager.find(Technical.class, id);
 
       technical.setState(false);
 

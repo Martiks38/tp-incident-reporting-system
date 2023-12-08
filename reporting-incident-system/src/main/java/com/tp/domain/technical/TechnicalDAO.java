@@ -13,5 +13,5 @@ public interface TechnicalDAO {
 
   void update(Technical data);
 
-  void delete(Long id);
+  void delete(Technical technical);
 }

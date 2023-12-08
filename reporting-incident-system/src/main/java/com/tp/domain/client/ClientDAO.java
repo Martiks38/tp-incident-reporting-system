@@ -13,5 +13,5 @@ public interface ClientDAO {
 
   void update(Client data);
 
-  void delete(Long id);
+  void delete(Client client);
 }

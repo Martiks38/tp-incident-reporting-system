@@ -11,5 +11,5 @@ public interface IncidentDAO {
 
   void update(Incident data);
 
-  void delete(Long id);
+  void delete(Incident incident);
 }

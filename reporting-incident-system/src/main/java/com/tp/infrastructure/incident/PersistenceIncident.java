@@ -75,13 +75,11 @@ public class PersistenceIncident implements IncidentDAO {
   }
 
   @Override
-  public void delete(Long id) {
+  public void delete(Incident incident) {
     EntityTransaction transaction = manager.getTransaction();
 
     try {
       transaction.begin();
-
-      Incident incident = manager.find(Incident.class, id);
 
       incident.setState(false);
 

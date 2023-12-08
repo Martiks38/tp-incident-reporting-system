@@ -29,11 +29,15 @@ public class PersistenceClient implements ClientDAO {
 
   @Override
   public Client findByName(String name) {
+    if (name == null) {
+      return null;
+    }
+
     CriteriaBuilder cb = manager.getCriteriaBuilder();
     CriteriaQuery<Client> query = cb.createQuery(Client.class);
     Root<Client> root = query.from(Client.class);
 
-    query.select(root).where(cb.equal(root.get("business_name"), name));
+    query.select(root).where(cb.equal(root.get("business_name"), name.trim()));
 
     TypedQuery<Client> typedQuery = manager.createQuery(query);
 
@@ -97,17 +101,15 @@ public class PersistenceClient implements ClientDAO {
   }
 
   @Override
-  public void delete(Long id) {
+  public void delete(Client client) {
     EntityTransaction transaction = manager.getTransaction();
 
     try {
       transaction.begin();
 
-      Client c = manager.find(Client.class, id);
+      client.setState(false);
 
-      c.setState(false);
-
-      manager.merge(c);
+      manager.merge(client);
 
       transaction.commit();
     } catch (Exception e) {
