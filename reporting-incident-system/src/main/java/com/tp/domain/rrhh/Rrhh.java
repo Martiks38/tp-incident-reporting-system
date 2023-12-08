@@ -201,7 +201,7 @@ public class Rrhh {
     }
   }
 
-  static void handlerTechnical(Technical technical, ActionTechnical action, Long id) {
+  static void handlerTechnical(Technical technical, ActionTechnical action) {
     EntityManager manager = GetEntityManager.getManager();
 
     PersistenceTechnical conectionTechnical = new PersistenceTechnical(manager);
@@ -211,7 +211,7 @@ public class Rrhh {
     }
 
     if (action == ActionTechnical.REMOVE_TECHNICAL) {
-      conectionTechnical.delete(id);
+      conectionTechnical.delete(technical);
     }
 
     if (action == ActionTechnical.UPDATE_TECHNICAL) {
