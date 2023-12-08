@@ -29,9 +29,8 @@ public class PersistenceClient implements ClientDAO {
 
   @Override
   public Client findByName(String name) {
-    if (name == null) {
+    if (name == null)
       return null;
-    }
 
     CriteriaBuilder cb = manager.getCriteriaBuilder();
     CriteriaQuery<Client> query = cb.createQuery(Client.class);

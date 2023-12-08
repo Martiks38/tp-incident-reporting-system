@@ -29,6 +29,9 @@ public class PersistenceTechnical implements TechnicalDAO {
 
   @Override
   public Technical findByName(String name) {
+    if (name == null)
+      return null;
+
     CriteriaBuilder cb = manager.getCriteriaBuilder();
     CriteriaQuery<Technical> query = cb.createQuery(Technical.class);
     Root<Technical> root = query.from(Technical.class);

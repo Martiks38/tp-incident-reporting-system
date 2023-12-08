@@ -36,6 +36,9 @@ public class PersistenceService implements ServiceDAO {
 
   @Override
   public Service findByName(String name) {
+    if (name == null)
+      return null;
+
     CriteriaBuilder cb = manager.getCriteriaBuilder();
     CriteriaQuery<Service> query = cb.createQuery(Service.class);
     Root<Service> root = query.from(Service.class);

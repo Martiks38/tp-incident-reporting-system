@@ -27,6 +27,9 @@ public class PersistenceTypeProblem implements TypeProblemDAO {
 
   @Override
   public TypeProblem findByName(String name) {
+    if (name == null)
+      return null;
+
     CriteriaBuilder cb = manager.getCriteriaBuilder();
     CriteriaQuery<TypeProblem> query = cb.createQuery(TypeProblem.class);
     Root<TypeProblem> root = query.from(TypeProblem.class);

@@ -27,6 +27,9 @@ public class PersistenceSpecialty implements SpecialtyDAO {
 
   @Override
   public Specialty findByName(String name) {
+    if (name == null)
+      return null;
+
     CriteriaBuilder cb = manager.getCriteriaBuilder();
     CriteriaQuery<Specialty> query = cb.createQuery(Specialty.class);
     Root<Specialty> root = query.from(Specialty.class);

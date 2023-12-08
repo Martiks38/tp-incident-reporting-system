@@ -27,6 +27,9 @@ public class PersistenceNotificationMedium implements NotificationMediumDAO {
 
   @Override
   public NotificationMedium findByName(String name) {
+    if (name == null)
+      return null;
+
     CriteriaBuilder cb = manager.getCriteriaBuilder();
     CriteriaQuery<NotificationMedium> query = cb.createQuery(NotificationMedium.class);
     Root<NotificationMedium> root = query.from(NotificationMedium.class);
