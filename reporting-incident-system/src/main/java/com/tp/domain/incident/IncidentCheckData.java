@@ -48,7 +48,7 @@ public class IncidentCheckData {
       message += "Debe incluir una lista de los tipos de problemas relacionados al incidente.\n";
     }
 
-    if (message == null) {
+    if (message != null) {
       throw new RuntimeException(message);
     }
   }
