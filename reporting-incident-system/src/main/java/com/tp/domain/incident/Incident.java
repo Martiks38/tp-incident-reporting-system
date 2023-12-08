@@ -21,7 +21,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -112,13 +111,14 @@ public class Incident implements IncidentObservable {
   private Client client;
 
   @Setter
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "fk_service_id")
+  private Service service;
+
+  @Setter
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "incident__type_problem", joinColumns = @JoinColumn(name = "fk_itp_incident", nullable = false), inverseJoinColumns = @JoinColumn(name = "fk_itp_type_problem", nullable = false))
   private List<TypeProblem> incident_type_problem;
-
-  @Setter
-  @OneToOne(mappedBy = "incident", cascade = CascadeType.ALL)
-  Service incident_service;
 
   @Override
   public void subscribe(IncidentObserver client) {

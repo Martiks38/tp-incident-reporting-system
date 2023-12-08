@@ -15,7 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
@@ -43,7 +43,7 @@ public class Service {
   private String service_name;
 
   @Setter
-  @ManyToMany(mappedBy = "client_services", cascade = CascadeType.ALL)
+  @ManyToMany(mappedBy = "clientServices", cascade = CascadeType.ALL)
   private List<Client> clients;
 
   @Setter
@@ -51,7 +51,7 @@ public class Service {
   @JoinTable(name = "service__type_problem", joinColumns = @JoinColumn(name = "fk_stp_service", nullable = false), inverseJoinColumns = @JoinColumn(name = "fk_stp_type_problem", nullable = false))
   private List<TypeProblem> typesProblem;
 
-  @OneToOne
-  @JoinColumn(name = "incident_service")
-  Incident incident;
+  @Setter
+  @OneToMany(mappedBy = "service", cascade = CascadeType.ALL)
+  private List<Incident> incidents;
 }
