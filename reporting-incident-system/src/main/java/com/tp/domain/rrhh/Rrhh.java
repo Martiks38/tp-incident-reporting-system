@@ -5,10 +5,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import com.tp.application.GetEntityManager;
+import com.tp.application.GetScanner;
 import com.tp.assets.ActionTechnical;
 import com.tp.assets.Constant;
 import com.tp.domain.incident.Incident;
@@ -92,7 +94,7 @@ public class Rrhh {
     }
   }
 
-  public static void technicianWithMostIncidentsForNDays(int days) {
+  public static void technicianWithMostIncidentsForNDays() {
     EntityManager manager = GetEntityManager.getManager();
 
     List<Incident> incidents = new PersistenceIncident(manager).findAll()
@@ -104,6 +106,12 @@ public class Rrhh {
       System.out.print("No se encontraron incidentes.");
       return;
     }
+
+    Scanner scanner = GetScanner.getScanner();
+
+    System.out.print("\n\nPor favor ingrese la cantidad de días atrás para genererar el reporte. ");
+
+    int days = scanner.nextInt();
 
     LocalDate currentDate = LocalDate.now();
     LocalDate startDate = currentDate.minusDays(days);
@@ -132,7 +140,7 @@ public class Rrhh {
     }
   }
 
-  public static void technicianWithMostIncidentsForNDaysBySpecialty(int days, String specialty_name) {
+  public static void technicianWithMostIncidentsForNDaysBySpecialty() {
     EntityManager manager = GetEntityManager.getManager();
 
     List<Incident> incidents = new PersistenceIncident(manager).findAll()
@@ -144,6 +152,17 @@ public class Rrhh {
       System.out.print("No se encontraron incidentes.");
       return;
     }
+
+    Scanner scanner = GetScanner.getScanner();
+
+    System.out.print("\n\nPor favor ingrese la cantidad de días atrás para genererar el reporte. ");
+    int days = scanner.nextInt();
+
+    // Consumir la nueva línea pendiente
+    scanner.nextLine();
+
+    System.out.print("\nPor favor ingrese la especialidad a buscar. ");
+    String specialty_name = scanner.nextLine().toLowerCase();
 
     LocalDate currentDate = LocalDate.now();
     LocalDate startDate = currentDate.minusDays(days);

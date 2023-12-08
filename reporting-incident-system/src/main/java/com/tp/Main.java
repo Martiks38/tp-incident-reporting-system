@@ -14,10 +14,6 @@ public class Main {
 
         int opcion;
 
-        final int days = 7;
-        final String specialty_name1 = "training";
-        final String specialty_name2 = "software";
-
         InitSuscribeIncidents.initExecution();
 
         do {
@@ -45,11 +41,7 @@ public class Main {
                     Rrhh.technicianWithMostIncidentsForNDays();
                     break;
                 case 4:
-                    Rrhh.technicianWithMostIncidentsForNDaysBySpecialty(days, specialty_name1);
-
-                    System.out.println();
-
-                    Rrhh.technicianWithMostIncidentsForNDaysBySpecialty(days, specialty_name2);
+                    Rrhh.technicianWithMostIncidentsForNDaysBySpecialty();
                     break;
                 case 5:
                     Operator.assistCustomer();
