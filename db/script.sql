@@ -154,7 +154,7 @@
   CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`incident` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `description` VARCHAR(255) NOT NULL,
-    `considerations` VARCHAR(255) NOT NULL,
+    `considerations` VARCHAR(255),
     `fk_technical_id` BIGINT,
     `fk_client_id` BIGINT,
     `resolved` TINYINT NOT NULL,
@@ -343,7 +343,7 @@ CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`incident__type_problem` 
       (8, 4),
       (8, 5),
       (8, 7);
-      
+
   INSERT INTO `incident-reporting-system`.incident
     VALUES
       (1, 'Los usuarios experimentan problemas intermitentes de conexión a la red, lo que resulta en la imposibilidad de acceder a servicios en línea o compartir archivos de manera efectiva.', 'Problemas intermitentes de conexión afectan la accesibilidad a servicios en línea y la eficacia en la compartición de archivos. Se requiere diagnóstico exhaustivo, considerando enrutador, posibles interferencias y configuraciones de firewall.', 1, 1, 0, '2023-11-24 16:13:34', null, null, 1, 2),
@@ -357,7 +357,7 @@ CREATE TABLE IF NOT EXISTS `incident-reporting-system`.`incident__type_problem` 
       (1, 2),
       (2, 5),
       (3, 3);
-      
+
 INSERT INTO `incident-reporting-system`.incident__type_problem
 	VALUES
 		(1, 3),
@@ -365,7 +365,7 @@ INSERT INTO `incident-reporting-system`.incident__type_problem
         (3, 6),
         (4, 7),
         (5, 4);
-      
+
 -- SELECT * FROM `client`;
 -- SELECT * from client__service;
 -- SELECT * FROM service;
