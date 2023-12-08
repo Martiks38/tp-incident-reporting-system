@@ -126,7 +126,7 @@ public class Incident implements IncidentObservable {
   }
 
   @Override
-  public void unsubscribe(IncidentObserver client) {
+  public void unsubscribe() {
     this.clientObserver = null;
   }
 
