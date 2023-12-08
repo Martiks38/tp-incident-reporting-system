@@ -90,12 +90,6 @@ public class Client implements IncidentObserver {
         && Objects.equals(incidents, client.incidents) && Objects.equals(client_services, client.client_services);
   }
 
-  public void receiveIncidentNotification(String message) {
-    NotifyDecorator notify = new EmailDecorator(new NotifyBasic());
-
-    notify.emitMessage(message, this.mail);
-  }
-
   @Override
   public void update(Incident incident) {
     if (incident.getResolved()) {
@@ -109,4 +103,18 @@ public class Client implements IncidentObserver {
     }
   }
 
+  public void receiveIncidentNotification(String message) {
+    NotifyDecorator notify = new EmailDecorator(new NotifyBasic());
+
+    notify.emitMessage(message, this.mail);
+  }
+
+  public void copyProperties(Client source) {
+    this.cuit = source.getCuit();
+    this.business_name = source.getBusiness_name();
+    this.mail = source.getMail();
+    this.state = source.getState();
+    this.incidents = source.getIncidents();
+    this.client_services = source.getClient_services();
+  }
 }
