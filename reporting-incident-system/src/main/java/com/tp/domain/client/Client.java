@@ -1,7 +1,6 @@
 package com.tp.domain.client;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.hibernate.type.NumericBooleanConverter;
 
@@ -43,13 +42,13 @@ public class Client implements IncidentObserver {
   }
 
   public Client(String cuit, String business_name, String mail, boolean state, List<Incident> incidents,
-      List<Service> client_services) {
+      List<Service> clientServices) {
     this.cuit = cuit;
     this.business_name = business_name;
     this.mail = mail;
     this.state = state;
     this.incidents = incidents;
-    this.client_services = client_services;
+    this.clientServices = clientServices;
   }
 
   @Setter
@@ -75,20 +74,8 @@ public class Client implements IncidentObserver {
 
   @Setter
   @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(name = "client__service", joinColumns = @JoinColumn(name = "fk_cs_client", nullable = false), inverseJoinColumns = @JoinColumn(name = "fk_cs_service", nullable = false))
-  private List<Service> client_services;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (!(o instanceof Client))
-      return false;
-    Client client = (Client) o;
-    return state == client.state && Objects.equals(client_id, client.client_id) && Objects.equals(cuit, client.cuit)
-        && Objects.equals(business_name, client.business_name) && Objects.equals(mail, client.mail)
-        && Objects.equals(incidents, client.incidents) && Objects.equals(client_services, client.client_services);
-  }
+  @JoinTable(name = "client__service", joinColumns = @JoinColumn(name = "fk_cs_client"), inverseJoinColumns = @JoinColumn(name = "fk_cs_service"))
+  private List<Service> clientServices;
 
   @Override
   public void update(Incident incident) {
@@ -110,11 +97,13 @@ public class Client implements IncidentObserver {
   }
 
   public void copyProperties(Client source) {
+    this.client_id = source.getClient_id();
     this.cuit = source.getCuit();
     this.business_name = source.getBusiness_name();
     this.mail = source.getMail();
     this.state = source.getState();
     this.incidents = source.getIncidents();
-    this.client_services = source.getClient_services();
+    this.clientServices = source.getClientServices();
   }
+
 }
