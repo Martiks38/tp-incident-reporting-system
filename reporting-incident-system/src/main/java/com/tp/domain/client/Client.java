@@ -80,8 +80,9 @@ public class Client implements IncidentObserver {
   @Override
   public void update(Incident incident) {
     if (incident.getResolved()) {
-      String message = "Buenos días.\nLe notificamos que el incidente reportado por " + this.business_name
-          + " ya ha sido solucionado.\n\nIncidente:\n" + incident.getDescription() + "\n\nConsideraciones:\n"
+      String message = "Buenos días.\nLe notificamos que el incidente con id " + incident.getIncident_id()
+          + " reportado por " + this.business_name
+          + " ya ha sido solucionado.\n\n" + "\n\nConsideraciones:\n"
           + incident.getConsiderations();
 
       receiveIncidentNotification(message);
