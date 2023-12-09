@@ -158,7 +158,7 @@ public class Technical {
     }
   }
 
-  void resolveIncident(Incident incident, String considerations) {
+  public void resolveIncident(Incident incident, String considerations) {
     PersistenceIncident persistenceIncident = new PersistenceIncident(manager);
     PersistenceTechnical persistenceTechnical = new PersistenceTechnical(manager);
 
