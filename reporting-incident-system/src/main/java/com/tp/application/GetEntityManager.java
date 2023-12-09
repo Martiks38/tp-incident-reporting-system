@@ -25,4 +25,8 @@ public final class GetEntityManager {
 
     return manager;
   }
+
+  public static void closeManager() {
+    manager.close();
+  }
 }
