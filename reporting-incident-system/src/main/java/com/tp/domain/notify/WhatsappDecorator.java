@@ -8,9 +8,9 @@ public class WhatsappDecorator extends NotifyDecorator {
 
   @Override
   public void emitMessage(String message, String environmentData) {
-    super.emitMessage(message, environmentData);
-
     System.out.print("Notificación por medio de WhatsApp.\n");
+
+    super.emitMessage(message, environmentData);
   }
 
 }
