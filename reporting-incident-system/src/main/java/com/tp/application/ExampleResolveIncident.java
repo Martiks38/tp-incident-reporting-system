@@ -24,14 +24,14 @@ public class ExampleResolveIncident {
         .filter(i -> !i.getResolved())
         .collect(Collectors.toList());
 
-    Incident incidentToResolve = unresolvedIncidents.get(unresolvedIncidents.size() * random.nextInt());
+    Incident incidentToResolve = unresolvedIncidents.get(random.nextInt(unresolvedIncidents.size()));
     Technical technical = incidentToResolve.getTechnical();
 
     String considerations;
     boolean invalidConsiderations = true;
 
     do {
-      System.out.println("Ingrese las consideraciones del incidente, máximo 255 caracteres.");
+      System.out.println("\n\nIngrese las consideraciones del incidente, máximo 255 caracteres.");
 
       considerations = scanner.nextLine();
       invalidConsiderations = considerations.length() <= 0 || considerations.length() > 255;

@@ -169,7 +169,7 @@ public class Technical {
 
     int deliveryTime = (int) ChronoUnit.DAYS.between(startDateIncident, deadlineIncident);
 
-    int numberDaysEmployed = random.nextInt() * deliveryTime;
+    int numberDaysEmployed = random.nextInt(deliveryTime);
 
     LocalDate finishDate = GetDate.calculateDate(startDateIncident, numberDaysEmployed);
     Date resolvedIncident = Date.valueOf(finishDate);
@@ -178,8 +178,9 @@ public class Technical {
     incident.setResolved(true);
     incident.setTime_is_up(resolvedIncident);
 
-    if (this.incident_resolution_speed > numberDaysEmployed) {
+    if (this.incident_resolution_speed == null || this.incident_resolution_speed > numberDaysEmployed) {
       this.setIncident_resolution_speed((long) numberDaysEmployed);
+      this.setNumber_incidents_resolved(this.number_incidents_resolved + 1);
 
       persistenceTechnical.update(this);
     }
