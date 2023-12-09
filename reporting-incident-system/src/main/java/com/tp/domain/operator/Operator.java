@@ -41,9 +41,9 @@ public class Operator {
     System.out.print("\nPor favor ingrese su cuit: ");
     customer.setCuit(scanner.nextLine());
 
-    findClientDate(customer, persistenceClient);
+    findClientData(customer, persistenceClient);
 
-    List<Service> client_services = customer.getClient_services();
+    List<Service> client_services = customer.getClientServices();
 
     Incident newIncident = new Incident();
     Date currentDay = Date.valueOf(LocalDate.now());
@@ -68,7 +68,8 @@ public class Operator {
       System.out.println("Mensaje para el operador.");
       System.out.println("El cliente tiene contratado los siguientes servicios:\n");
 
-      List<Service> clientServices = customer.getClient_services();
+      List<Service> clientServices = customer.getClientServices();
+
       int amountClientServices = clientServices.size();
 
       clientServices.forEach(service -> {
@@ -78,15 +79,21 @@ public class Operator {
       boolean isInvalidOption = true;
       int optionService = -1;
 
-      System.out.println("Mensaje para el cliente.");
+      System.out.println("\nMensaje para el cliente.");
 
       do {
-        System.out
-            .println("Por favor elija con cuál servicio desea reportar el incidente. (1-" + amountClientServices + ")");
+        System.out.println("Tiene los siguientes servicios contratados.");
 
-        customer.getClient_services().forEach(service -> {
-          System.out.print(" -\t" + service.getService_name() + "\n");
-        });
+        List<Service> services = customer.getClientServices();
+
+        for (int ind = 0; ind < services.size(); ind++) {
+          System.out.print(" " + (ind + 1) + "-\t" + services.get(ind).getService_name() + "\n");
+        }
+
+        System.out
+            .print(
+                "\nPor favor elija con cuál servicio desea reportar el incidente. Introduzca su opción del 1 al "
+                    + amountClientServices + ". ");
 
         optionService = scanner.nextInt();
 
@@ -97,7 +104,7 @@ public class Operator {
         } else {
           Service selectedService = clientServices.get(optionService - 1);
 
-          newIncident.setIncident_service(selectedService);
+          newIncident.setService(selectedService);
         }
       } while (isInvalidOption);
 
@@ -107,17 +114,17 @@ public class Operator {
 
     handlerDescription(newIncident);
 
-    Service incidentService = newIncident.getIncident_service();
+    Service incidentService = newIncident.getService();
     List<TypeProblem> typesProblemOfIncidentService = incidentService.getTypesProblem();
 
-    while (typesProblemOfIncidentService.containsAll(newIncident.getIncident_type_problem())) {
+    while (!typesProblemOfIncidentService.containsAll(newIncident.getIncident_type_problem())) {
 
       System.out.println(
-          "Los tipos de problemas asociados al incidente reportado no coinciden con el servicio adjuntado.\n");
+          "\nLos tipos de problemas asociados al incidente reportado no coinciden con el servicio adjuntado.\n");
 
       handlerTypesProblem(newIncident);
 
-      incidentService = newIncident.getIncident_service();
+      incidentService = newIncident.getService();
       typesProblemOfIncidentService = incidentService.getTypesProblem();
     }
 
@@ -127,7 +134,7 @@ public class Operator {
 
   }
 
-  private static void findClientDate(Client client, PersistenceClient persistenceClient) {
+  private static void findClientData(Client client, PersistenceClient persistenceClient) {
     Client customerData = persistenceClient.findByName(client.getBusiness_name());
 
     if (customerData != null) {
@@ -146,7 +153,7 @@ public class Operator {
       System.out.print("\n\nMuchas gracias.");
 
       client.setMail(email);
-      client.setClient_services(new ArrayList<>());
+      client.setClientServices(new ArrayList<>());
       client.setIncidents(new ArrayList<>());
 
       ComercialArea.handlerClient(client, ActionClient.CREATE_CLIENT);
@@ -155,7 +162,7 @@ public class Operator {
 
   private static void handlerServiceClient(Client customer, Incident incident) {
     List<Service> services = new PersistenceService(manager).findAll();
-    List<Service> client_services = customer.getClient_services();
+    List<Service> client_services = customer.getClientServices();
 
     services.forEach(s -> {
       String name = s.getService_name();
@@ -180,7 +187,7 @@ public class Operator {
     int option = -1;
 
     do {
-      System.out.print("Elija una opción (1-" + services.size() + "): ");
+      System.out.print("\nElija una opción (1-" + services.size() + "): ");
 
       option = scanner.nextInt();
 
@@ -203,18 +210,18 @@ public class Operator {
       }
     } while (isInvalidOption);
 
-    customer.setClient_services(client_services);
+    customer.setClientServices(client_services);
 
     ComercialArea.handlerClient(customer, ActionClient.UPDATE_CLIENT);
 
     int amountClientServices = client_services.size();
     isInvalidOption = true;
 
-    System.out.print("Elija el servicio con el cuál quiere reportar el incidente.");
+    System.out.println("Elija el servicio con el cuál quiere reportar el incidente.");
     System.out.println("Sus servicios contratados son:\n");
 
     client_services.forEach(service -> {
-      System.out.print(service.getService_name());
+      System.out.println(service.getService_name());
     });
 
     do {
@@ -229,7 +236,7 @@ public class Operator {
       } else {
         Service selectedService = services.get(option - 1);
 
-        incident.setIncident_service(selectedService);
+        incident.setService(selectedService);
       }
     } while (isInvalidOption);
   }
@@ -243,16 +250,17 @@ public class Operator {
 
     List<TypeProblem> incidentTypeProblem = new ArrayList<>();
 
-    System.out.print("¿Cuáles son los tipos problemas asociados al incidente que desea reportar?\n\n");
+    System.out.print("\n¿Cuáles son los tipos de problemas asociados al incidente que desea reportar?\n\n");
 
-    typesProblem.forEach(tp -> {
-      System.out.print(tp.getType_problem_name());
-    });
+    for (int ind = 0; ind < typesProblem.size(); ind++) {
+      System.out.println(" " + (ind + 1) + "-\t" + typesProblem.get(ind).getType_problem_name());
+    }
 
     do {
-      System.out.print("Elija una opción (1-" + amountTypesProblem + "): ");
+      System.out.print("\nElija una opción (1-" + amountTypesProblem + "): ");
 
       option = scanner.nextInt();
+      scanner.nextLine();
 
       isInvalidOption = !(option > 0 && option <= amountTypesProblem);
 
@@ -261,7 +269,7 @@ public class Operator {
       } else {
         TypeProblem selectedTypeProblemService = typesProblem.get(option - 1);
 
-        System.out.print("Desea agregar otro tipo de problema al incidente. ( y/n )");
+        System.out.print("\nDesea agregar otro tipo de problema al incidente. ( y/n ) ");
 
         if (!incidentTypeProblem.contains(selectedTypeProblemService)) {
           incidentTypeProblem.add(selectedTypeProblemService);
@@ -280,13 +288,15 @@ public class Operator {
     boolean isInvalidDescription = true;
 
     do {
-      System.out.print("Ingrese una descripción del problema. (máximo 255 caracteres)\n\n");
+      System.out.print("\n\nIngrese una descripción del problema. (máximo 255 caracteres)\n");
 
       String incidentDescription = scanner.nextLine();
       int lengthIncidentDescription = incidentDescription.length();
 
-      if (lengthIncidentDescription == 0 || lengthIncidentDescription > 255) {
-        System.out.print("Descripción no válida.");
+      isInvalidDescription = lengthIncidentDescription == 0 || lengthIncidentDescription > 255;
+
+      if (isInvalidDescription) {
+        System.out.println("\nDescripción no válida.");
       } else {
         incident.setDescription(incidentDescription);
       }
