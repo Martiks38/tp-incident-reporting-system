@@ -65,7 +65,7 @@ public class Rrhh {
 
         System.out.print("Incidente: " + id + "\n");
         System.out.print("Descripción\n");
-        ModifyText.LimitCharacterLine(description, Constant.LIMIT_CHARACTER_TEXT_CONSOLE);
+        ModifyText.limitCharacterLine(description, Constant.LIMIT_CHARACTER_TEXT_CONSOLE);
         System.out.print("\n");
         System.out.print("Estado: " + incidentState + "\n\n");
       });

@@ -1,7 +1,7 @@
 package com.tp.utils;
 
 public class ModifyText {
-  public static void LimitCharacterLine(String text, int limit) {
+  public static void limitCharacterLine(String text, int limit) {
     String[] lines = text.split("\\R");
 
     for (String line : lines) {
