@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import com.tp.application.GetEntityManager;
 import com.tp.application.GetScanner;
@@ -19,6 +20,7 @@ import com.tp.domain.type_problem.TypeProblem;
 import com.tp.infrastructure.client.PersistenceClient;
 import com.tp.infrastructure.service.PersistenceService;
 import com.tp.infrastructure.type_problem.PersistenceTypeProblem;
+import com.tp.utils.CheckFormat;
 
 import jakarta.persistence.EntityManager;
 
@@ -55,8 +57,8 @@ public class Operator {
     newIncident.setState(true);
 
     if (client_services.size() == 0) {
-      System.out.println("Mensaje para el Operador");
-      System.out.println("No ha contratado ningún servicio.");
+      System.out.println("\nMensaje para el Operador");
+      System.out.println("No ha contratado ningún servicio.\n");
 
       System.out.println("Mensaje para el cliente");
       System.out.println("¿Cuál de nuestros servicios desea contratar?\n\n");
@@ -69,7 +71,6 @@ public class Operator {
       System.out.println("El cliente tiene contratado los siguientes servicios:\n");
 
       List<Service> clientServices = customer.getClientServices();
-
       int amountClientServices = clientServices.size();
 
       clientServices.forEach(service -> {
@@ -84,10 +85,8 @@ public class Operator {
       do {
         System.out.println("Tiene los siguientes servicios contratados.");
 
-        List<Service> services = customer.getClientServices();
-
-        for (int ind = 0; ind < services.size(); ind++) {
-          System.out.print(" " + (ind + 1) + "-\t" + services.get(ind).getService_name() + "\n");
+        for (int ind = 0; ind < clientServices.size(); ind++) {
+          System.out.print(" " + (ind + 1) + "-\t" + clientServices.get(ind).getService_name() + "\n");
         }
 
         System.out
@@ -114,18 +113,20 @@ public class Operator {
 
     handlerDescription(newIncident);
 
-    Service incidentService = newIncident.getService();
-    List<TypeProblem> typesProblemOfIncidentService = incidentService.getTypesProblem();
+    final Service incidentService = newIncident.getService();
 
-    while (!typesProblemOfIncidentService.containsAll(newIncident.getIncident_type_problem())) {
+    List<TypeProblem> containedTypesProblems = newIncident.getIncident_type_problem()
+        .stream()
+        .filter(tp -> {
+          return !incidentService.getTypesProblem().contains(tp);
+        })
+        .collect(Collectors.toList());
 
+    while (containedTypesProblems.size() != 0) {
       System.out.println(
           "\nLos tipos de problemas asociados al incidente reportado no coinciden con el servicio adjuntado.\n");
 
       handlerTypesProblem(newIncident);
-
-      incidentService = newIncident.getService();
-      typesProblemOfIncidentService = incidentService.getTypesProblem();
     }
 
     GenerateIncident.issueIncident(newIncident);
@@ -142,15 +143,26 @@ public class Operator {
     }
 
     if (customerData == null || !customerData.getState()) {
+      boolean isInvalidEmail = true;
       String email;
 
       System.out
-          .print("Es un cliente nuevo le vamos a pedir que ingrese los datos que le solicitaremos a continuación.\n\n");
+          .println(
+              "\nEs un cliente nuevo le vamos a pedir que ingrese los datos que le solicitaremos a continuación.\n");
+
       System.out.print("Ingrese una cuenta de email. ");
 
-      email = scanner.nextLine();
+      do {
+        email = scanner.nextLine();
 
-      System.out.print("\n\nMuchas gracias.");
+        isInvalidEmail = !CheckFormat.isValidEmail(email);
+
+        if (isInvalidEmail) {
+          System.out.print("\nEl correo no es válido por favor ingreselo nuevamente. ");
+        }
+      } while (isInvalidEmail);
+
+      System.out.println("\nMuchas gracias.\n");
 
       client.setMail(email);
       client.setClientServices(new ArrayList<>());
@@ -170,13 +182,13 @@ public class Operator {
 
       capitalizeName.append(Character.toUpperCase(name.charAt(0))).append(name.substring(1));
 
-      System.out.print(" *\t" + capitalizeName);
-      System.out.print(" \t\tOfrece solución a los siguientes problemas:\n");
+      System.out.println(" * " + capitalizeName);
+      System.out.println(" \tOfrece solución a los siguientes problemas:\n");
 
       List<TypeProblem> typesProblem = s.getTypesProblem();
 
       typesProblem.forEach(tp -> {
-        System.out.print(" \t\t" + tp.getType_problem_name());
+        System.out.println(" \t\t" + tp.getType_problem_name());
       });
 
       System.out.println();
@@ -187,16 +199,17 @@ public class Operator {
     int option = -1;
 
     do {
-      System.out.print("\nElija una opción (1-" + services.size() + "): ");
+      System.out.print("\nElija un servicio del (1-" + services.size() + "): ");
 
       option = scanner.nextInt();
+      scanner.nextLine();
 
       isInvalidOption = !(option > 0 && option <= amount_services);
 
       if (isInvalidOption) {
-        System.out.print("Opción inválida.\n\n");
+        System.out.println("Opción inválida.");
       } else {
-        System.out.print("Desea contratar otro servicio. ( y/n )");
+        System.out.print("Desea contratar otro servicio. ( y/n ) ");
 
         Service selectedService = services.get(option - 1);
 
@@ -218,11 +231,11 @@ public class Operator {
     isInvalidOption = true;
 
     System.out.println("Elija el servicio con el cuál quiere reportar el incidente.");
-    System.out.println("Sus servicios contratados son:\n");
+    System.out.println("Tiene los siguientes servicios contratados.");
 
-    client_services.forEach(service -> {
-      System.out.println(service.getService_name());
-    });
+    for (int ind = 0; ind < amountClientServices; ind++) {
+      System.out.print(" " + (ind + 1) + "-\t" + client_services.get(ind).getService_name() + "\n");
+    }
 
     do {
       System.out.print("\n\nElija una opción (1-" + amountClientServices + "): ");
@@ -234,7 +247,7 @@ public class Operator {
       if (isInvalidOption) {
         System.out.print("Opción inválida.\n\n");
       } else {
-        Service selectedService = services.get(option - 1);
+        Service selectedService = client_services.get(option - 1);
 
         incident.setService(selectedService);
       }
