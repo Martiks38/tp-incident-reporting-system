@@ -43,11 +43,11 @@ public class ReportIncident {
     LocalDate estimatedDateForSolution = miniumResolutionDay;
 
     System.out
-        .print("Se espera que el incidente se resuelva para el " +
+        .println("Se espera que el incidente se resuelva para el " +
             miniumResolutionDay + ". Y, en caso de complicación el problema se resolverá como máximo para el "
             + maxResolutionDay + ".\n");
 
-    System.out.println("¿Desea modificar el mínimo de tiempo para realizar la tarea? (y/n)");
+    System.out.print("¿Desea modificar el mínimo de tiempo para realizar la tarea? (y/n) ");
 
     String optionModify = scanner.nextLine().toLowerCase();
 
@@ -58,12 +58,12 @@ public class ReportIncident {
       boolean incorrectSelectedAdditionalTime = true;
 
       do {
-        System.out.println("Puede añadir hasta " + additionalTime
-            + "días para informar al cliente que estará resuleto su problema.\n¿Cuántos desea añadir? ");
+        System.out.print("\nPuede añadir hasta " + additionalTime
+            + " días para informar al cliente que estará resuleto su problema.\n¿Cuántos desea añadir? ");
 
         selectedAdditionalTime = scanner.nextLong();
 
-        incorrectSelectedAdditionalTime = selectedAdditionalTime >= 0 && selectedAdditionalTime < additionalTime;
+        incorrectSelectedAdditionalTime = !(selectedAdditionalTime >= 0 && selectedAdditionalTime <= additionalTime);
 
         if (incorrectSelectedAdditionalTime) {
           System.out.print("No es un tiempo válido.\n");
@@ -71,7 +71,7 @@ public class ReportIncident {
           estimatedDateForSolution = miniumResolutionDay.plusDays(selectedAdditionalTime);
         }
 
-      } while (selectedAdditionalTime < 0 || selectedAdditionalTime > additionalTime);
+      } while (incorrectSelectedAdditionalTime);
     }
 
     incident.setDeadline(Date.valueOf(estimatedDateForSolution));
@@ -79,7 +79,7 @@ public class ReportIncident {
     persistenceIncident.update(incident);
 
     Client client = incident.getClient();
-    String clientMessage = "Mensaje para el client.\nSu incidente ya ha sido ingresado. Se estima que su problema estará solucionado para el día"
+    String clientMessage = "\nMensaje para el cliente.\nSu incidente ya ha sido ingresado. Se estima que su problema estará solucionado para el día "
         + estimatedDateForSolution + "\n\nMuchas gracias por elegirnos.";
 
     client.receiveIncidentNotification(clientMessage);
@@ -89,9 +89,9 @@ public class ReportIncident {
     String description = incident.getDescription();
 
     Technical technical = incident.getTechnical();
-    String technicalMessage = "Buenos días.\nSe le ha asignado el incidente id: \"" + id
+    String technicalMessage = "\nBuenos días.\nSe le ha asignado el incidente id: \"" + id
         + "\" con fecha de solución para el "
-        + estimatedDateForSolution + ".\n\nDescripción\n" + description;
+        + estimatedDateForSolution + ".\n\nDescripción\n" + description + "\n";
 
     technical.receiveIncidentNotification(technicalMessage);
 
