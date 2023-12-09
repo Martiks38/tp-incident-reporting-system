@@ -2,17 +2,16 @@ package com.tp.domain.operator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.tp.application.GetEntityManager;
-import com.tp.application.GetScanner;
 import com.tp.domain.incident.Incident;
 import com.tp.domain.specialty.Specialty;
 import com.tp.domain.technical.Technical;
 import com.tp.domain.type_problem.TypeProblem;
 import com.tp.infrastructure.incident.PersistenceIncident;
 import com.tp.infrastructure.technical.PersistenceTechnical;
+import com.tp.utils.Inputs;
 
 import jakarta.persistence.EntityManager;
 
@@ -20,7 +19,6 @@ public class GenerateIncident {
   private static EntityManager manager = GetEntityManager.getManager();
 
   public static void issueIncident(Incident incident) {
-    Scanner scanner = GetScanner.getScanner();
 
     PersistenceIncident persistenceIncident = new PersistenceIncident(manager);
     PersistenceTechnical persistenceTechnical = new PersistenceTechnical(manager);
@@ -56,10 +54,8 @@ public class GenerateIncident {
     int option = -1;
 
     do {
-      System.out.print("\nElija uno de ellos (1-" + amountPossibleTechnician + "): ");
-
-      option = scanner.nextInt();
-      scanner.nextLine();
+      option = Inputs.getIntInput("\nElija uno de ellos (1-" + amountPossibleTechnician + "): ",
+          "Debe ingresar un valor del 1 al " + amountPossibleTechnician);
 
       isInvalidOption = !(option > 0 && option <= amountPossibleTechnician);
 

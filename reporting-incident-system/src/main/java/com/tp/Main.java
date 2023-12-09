@@ -6,25 +6,14 @@ import com.tp.application.GetScanner;
 import com.tp.domain.incident.InitSuscribeIncidents;
 import com.tp.domain.operator.Operator;
 import com.tp.domain.rrhh.Rrhh;
+import com.tp.utils.Inputs;
 
-import java.util.Scanner;
-
-/**
- * TODO
- * 
- * Añadir control try_catch
- * a los scanner empleados
- * con esta tarea como la última se finaliza el proyecto
- * 
- */
 public class Main {
     public static void main(String[] args) {
 
-        Scanner scanner = GetScanner.getScanner();
+        InitSuscribeIncidents.initExecution();
 
         int opcion;
-
-        InitSuscribeIncidents.initExecution();
 
         do {
             System.out.println("\nMenú:");
@@ -36,11 +25,8 @@ public class Main {
             System.out.println("5. Crear incidente.");
             System.out.println("6. Finalizar incidente.");
             System.out.println("7. Salir");
-            System.out.print("Elige una opción (1-7): ");
 
-            opcion = scanner.nextInt();
-
-            scanner.nextLine();
+            opcion = Inputs.getIntInput("Elige una opción (1-7): ", "Debe elegir una opción (1-7)");
 
             switch (opcion) {
                 case 1:

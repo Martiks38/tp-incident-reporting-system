@@ -21,6 +21,7 @@ import com.tp.infrastructure.client.PersistenceClient;
 import com.tp.infrastructure.service.PersistenceService;
 import com.tp.infrastructure.type_problem.PersistenceTypeProblem;
 import com.tp.utils.CheckFormat;
+import com.tp.utils.Inputs;
 
 import jakarta.persistence.EntityManager;
 
@@ -89,12 +90,10 @@ public class Operator {
           System.out.print(" " + (ind + 1) + "-\t" + clientServices.get(ind).getService_name() + "\n");
         }
 
-        System.out
-            .print(
-                "\nPor favor elija con cuál servicio desea reportar el incidente. Introduzca su opción del 1 al "
-                    + amountClientServices + ". ");
-
-        optionService = scanner.nextInt();
+        optionService = Inputs.getIntInput(
+            "\nPor favor elija con cuál servicio desea reportar el incidente. Introduzca su opción del 1 al "
+                + amountClientServices + ". ",
+            "Debe elegir un valor entre 1 y " + amountClientServices + ".");
 
         isInvalidOption = !(optionService > 0 && optionService <= amountClientServices);
 
@@ -199,9 +198,8 @@ public class Operator {
     int option = -1;
 
     do {
-      System.out.print("\nElija un servicio del (1-" + services.size() + "): ");
-
-      option = scanner.nextInt();
+      option = Inputs.getIntInput("\nElija un servicio del (1-" + amount_services + "): ",
+          "Debe introducir un valor entre 1 y " + amount_services + ".");
       scanner.nextLine();
 
       isInvalidOption = !(option > 0 && option <= amount_services);
@@ -240,7 +238,8 @@ public class Operator {
     do {
       System.out.print("\n\nElija una opción (1-" + amountClientServices + "): ");
 
-      option = scanner.nextInt();
+      option = Inputs.getIntInput("\n\nElija una opción (1-" + amountClientServices + "): ",
+          "Debe introducir un valor entre 1 y " + amountClientServices + ".");
 
       isInvalidOption = !(option > 0 && option <= amountClientServices);
 
@@ -270,9 +269,8 @@ public class Operator {
     }
 
     do {
-      System.out.print("\nElija una opción (1-" + amountTypesProblem + "): ");
-
-      option = scanner.nextInt();
+      option = Inputs.getIntInput("\nElija una opción (1-" + amountTypesProblem + "): ",
+          "Debe introducir un valor entre 1 y " + amountTypesProblem + ".");
       scanner.nextLine();
 
       isInvalidOption = !(option > 0 && option <= amountTypesProblem);

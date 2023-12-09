@@ -19,6 +19,7 @@ import com.tp.domain.technical.Technical;
 import com.tp.infrastructure.incident.PersistenceIncident;
 import com.tp.infrastructure.specialty.PersistenceSpecialty;
 import com.tp.infrastructure.technical.PersistenceTechnical;
+import com.tp.utils.Inputs;
 import com.tp.utils.ModifyText;
 
 import jakarta.persistence.EntityManager;
@@ -107,14 +108,11 @@ public class Rrhh {
       return;
     }
 
-    Scanner scanner = GetScanner.getScanner();
-
-    System.out.print("\n\nPor favor ingrese la cantidad de días atrás para genererar el reporte. ");
-
-    int days = scanner.nextInt();
+    int days = Inputs.getIntInput("\n\nPor favor ingrese la cantidad de días atrás para genererar el reporte. ",
+        "Debe ingresar un valor numérico entero.");
 
     LocalDate currentDate = LocalDate.now();
-    LocalDate startDate = currentDate.minusDays(days);
+    LocalDate startDate = currentDate.minusDays(Math.abs(days));
 
     Map<Technical, List<Incident>> incidentsResolvedInLastNDays = incidents.stream()
         .filter(i -> i.getTime_is_up() != null)
@@ -155,8 +153,8 @@ public class Rrhh {
 
     Scanner scanner = GetScanner.getScanner();
 
-    System.out.print("\n\nPor favor ingrese la cantidad de días atrás para genererar el reporte. ");
-    int days = scanner.nextInt();
+    int days = Inputs.getIntInput("\n\nPor favor ingrese la cantidad de días atrás para genererar el reporte. ",
+        "Debe ingresar un valor numérico entero.");
 
     // Consumir la nueva línea pendiente
     scanner.nextLine();
@@ -165,7 +163,7 @@ public class Rrhh {
     String specialty_name = scanner.nextLine().toLowerCase();
 
     LocalDate currentDate = LocalDate.now();
-    LocalDate startDate = currentDate.minusDays(days);
+    LocalDate startDate = currentDate.minusDays(Math.abs(days));
     Specialty specialty = new PersistenceSpecialty(manager).findByName(specialty_name);
 
     if (specialty == null) {
