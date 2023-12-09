@@ -44,19 +44,22 @@ public class GenerateIncident {
           return canSolve.containsAll(typeProblems);
         }).collect(Collectors.toList());
 
-    System.out.print("Mensaje al operador.");
-    System.out.print("Los posibles técnicos que pueden resolver el problema son: \n\n");
+    System.out.println("\nMensaje al operador.");
+    System.out.println("Los posibles técnicos que pueden resolver el problema son: \n\n");
 
-    possibleTechnicians.forEach(Technical::getTechnical_name);
+    for (int ind = 0; ind < possibleTechnicians.size(); ind++) {
+      System.out.println(" " + (ind + 1) + "-\t" + possibleTechnicians.get(ind).getTechnical_name());
+    }
 
     boolean isInvalidOption = true;
     int amountPossibleTechnician = possibleTechnicians.size();
     int option = -1;
 
     do {
-      System.out.print("Elija uno de ellos (1-" + amountPossibleTechnician + "): ");
+      System.out.print("\nElija uno de ellos (1-" + amountPossibleTechnician + "): ");
 
       option = scanner.nextInt();
+      scanner.nextLine();
 
       isInvalidOption = !(option > 0 && option <= amountPossibleTechnician);
 
